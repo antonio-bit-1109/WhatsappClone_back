@@ -1,11 +1,12 @@
 package com.example.demo.entity;
 
+import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class Anagrafica {
+public class Anagrafica implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

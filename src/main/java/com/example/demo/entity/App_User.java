@@ -1,9 +1,10 @@
 package com.example.demo.entity;
 
+import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
 
 @Entity
-public class App_User {
+public class App_User implements BaseEntity {
 
 
     @Id
