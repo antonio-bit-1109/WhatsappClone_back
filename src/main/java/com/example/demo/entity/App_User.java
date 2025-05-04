@@ -3,14 +3,14 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-public class User {
+public class App_User {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -18,6 +18,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Anagrafica anagrafica;
+
 
     public Anagrafica getAnagrafica() {
         return anagrafica;

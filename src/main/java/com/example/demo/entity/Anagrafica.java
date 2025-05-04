@@ -17,7 +17,7 @@ public class Anagrafica {
     @Column(nullable = false)
     private String luogoDiNascita;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 16)
     private String cf;
 
     @Column(nullable = false)
@@ -30,7 +30,8 @@ public class Anagrafica {
     private String cognome;
 
     @OneToOne(mappedBy = "anagrafica")
-    private User user;
+    private App_User appUser;
+
 
     public Long getId() {
         return id;
@@ -88,11 +89,11 @@ public class Anagrafica {
         this.cognome = cognome;
     }
 
-    public User getUser() {
-        return user;
+    public App_User getUser() {
+        return appUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(App_User appUser) {
+        this.appUser = appUser;
     }
 }
