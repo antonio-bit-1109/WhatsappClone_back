@@ -1,10 +1,14 @@
 package com.example.demo.interfaces;
 
 
-// i servizi implementeranno le basic crud per le crud base
-public interface BasicCrud {
+import com.example.demo.dto.requests.UserRegistrationDTO;
 
-    void create();
+import java.util.List;
+
+// i servizi implementeranno le basic crud per le crud base
+public interface BasicCrud<T> {
+
+    void create(T dataRegistration);
 
     void edit();
 

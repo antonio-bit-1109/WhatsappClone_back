@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.requests.UserRegistrationDTO;
 import com.example.demo.interfaces.IAuthService;
 import com.example.demo.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +20,10 @@ public class AuthController {
     }
 
     @RequestMapping("/register")
-    public ResponseEntity<?> register() {
-        this.authService.create();
+    public ResponseEntity<?> register(
+            @Valid @RequestBody UserRegistrationDTO dataRegistration
+    ) {
+        this.authService.create(dataRegistration);
         return null;
     }
 
