@@ -16,9 +16,11 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @RequestMapping("/register")
     public ResponseEntity<?> register() {
         this.authService.create();
         return null;
     }
+
 
 }

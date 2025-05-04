@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerResponseExceptions {
 
+
+    // intercettazione degli errori runtime
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<StringResponse> handleRuntimeException(RuntimeException ex) {
         return new ResponseEntity<>(new StringResponse(ex.getMessage()),
