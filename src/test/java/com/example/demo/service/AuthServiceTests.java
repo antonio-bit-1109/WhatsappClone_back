@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.requests.CreateAnagraficaDTO;
-import com.example.demo.dto.requests.CreateUserDTO;
-import com.example.demo.dto.requests.UserRegistrationDTO;
+import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
+import com.example.demo.dto.requests.appUser.CreateUserDTO;
+import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.repository.AnagraficaRepository;

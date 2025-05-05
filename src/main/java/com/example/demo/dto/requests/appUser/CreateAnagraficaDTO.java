@@ -1,4 +1,4 @@
-package com.example.demo.dto.requests;
+package com.example.demo.dto.requests.appUser;
 
 import com.example.demo.entity.App_User;
 import com.example.demo.interfaces.DtoInterface;

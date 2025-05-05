@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.requests.UserRegistrationDTO;
-import com.example.demo.interfaces.IAuthService;
+import com.example.demo.dto.requests.appUser.LoginDTO;
+import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
+import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,13 +21,19 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @RequestMapping("/register")
-    public ResponseEntity<?> register(
+    @PostMapping("/register")
+    public ResponseEntity<StringResponse> register(
             @Valid @RequestBody UserRegistrationDTO dataRegistration
     ) {
         this.authService.create(dataRegistration);
-        return null;
+        return ResponseEntity.ok(new StringResponse("registrazione effettuata con successo."));
     }
 
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+            @Valid @RequestBody LoginDTO loginData
+    ) {
+        this.authService.login(loginData);
+    }
 }
