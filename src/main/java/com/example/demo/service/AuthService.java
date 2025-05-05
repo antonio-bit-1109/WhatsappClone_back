@@ -84,4 +84,9 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
     public void getAll() {
 
     }
+
+    @Override
+    public void login() {
+
+    }
 }

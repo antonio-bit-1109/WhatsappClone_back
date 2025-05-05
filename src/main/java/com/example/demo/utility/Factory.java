@@ -5,6 +5,7 @@ import com.example.demo.dto.requests.CreateUserDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.interfaces.EntityFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,11 +14,18 @@ import java.time.LocalDateTime;
 @Service
 public class Factory implements EntityFactory {
 
+    private final PasswordEncoder passwordEncoder;
+
+    public Factory(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+
+    }
+
     @Override
     public App_User createEntityUser(CreateUserDTO data) {
         App_User user = new App_User();
         user.setUsername(data.getUsername());
-        user.setPassword(data.getPassword());
+        user.setPassword(this.passwordEncoder.encode(data.getPassword()));
         return user;
     }
 

@@ -4,4 +4,6 @@ package com.example.demo.interfaces;
 // che non sono le 5 crud di base
 // create, edit, delete, get , getAll
 public interface IAuthService {
+    void login();
+
 }
