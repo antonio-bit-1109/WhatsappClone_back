@@ -1,5 +1,7 @@
 package com.example.demo.security;
 
+import com.example.demo.repository.App_UserRepository;
+import com.example.demo.utility.adapter.CustomUserDetailsService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -12,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,15 +45,18 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig {
+public class ConfigurationFile {
 
 
     // oggetto utilizzabile nella mia applicazione Spring per fare l hash della password
+    // bean per l hash della password
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // bean per le configurazioni http cors,
+    // e autenticazione di accesso agli endpoint dell applicazione
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -102,20 +106,35 @@ public class SpringSecurityConfig {
                 )
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
+                // se impostato di default ti fornisce gia un form html da utilizzare
+                // altrimenti puo essere fornito un form html personalizzato
                 .formLogin(Customizer.withDefaults());
 
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails userDetails = User.builder()
-                .username("user")
-                .password(passwordEncoder.encode("password"))
-                .roles("USER")
-                .build();
+//    @Bean
+//    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+//        UserDetails userDetails = User.builder()
+//                .username("user")
+//                .password(passwordEncoder.encode("password"))
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(userDetails);
+//    }
 
-        return new InMemoryUserDetailsManager(userDetails);
+    // registro l'adapter creato CustomUserDetailsService
+    // nei file di configurazione affinche spring sia in grado
+    // di reperire lo user tramite lo username fornit e controllare automaticamente se sia
+    // registrato sull app oppure no
+
+    //    Spring Authorization Server, una volta configurato,
+//    usa in automatico il UserDetailsService per autenticare
+//    l’utente quando viene richiesta /oauth2/authorize.
+    @Bean
+    public UserDetailsService userDetailsService(App_UserRepository repository) {
+        return new CustomUserDetailsService(repository);
     }
 
     @Bean

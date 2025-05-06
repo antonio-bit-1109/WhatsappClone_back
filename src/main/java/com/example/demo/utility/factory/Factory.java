@@ -1,4 +1,4 @@
-package com.example.demo.utility;
+package com.example.demo.utility.factory;
 
 import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;

@@ -1,4 +1,4 @@
-package com.example.demo.utility;
+package com.example.demo.utility.exception;
 
 import com.example.demo.dto.responses.StringResponse;
 import org.springframework.http.HttpStatus;

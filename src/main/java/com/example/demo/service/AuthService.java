@@ -11,7 +11,7 @@ import com.example.demo.interfaces.BasicCrud;
 import com.example.demo.interfaces.IAuthService;
 import com.example.demo.repository.AnagraficaRepository;
 import com.example.demo.repository.App_UserRepository;
-import com.example.demo.utility.Factory;
+import com.example.demo.utility.factory.Factory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -80,9 +80,11 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
         ) {
 
             // prendi i dati utente e crea il token
-
+            return null;
         }
 
+
+        return null;
     }
 
     // controlla se l'utente esiste nel db e ritorna un booleano
