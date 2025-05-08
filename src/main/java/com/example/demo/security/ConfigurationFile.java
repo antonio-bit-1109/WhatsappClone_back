@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -30,7 +32,6 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -60,8 +61,10 @@ public class ConfigurationFile {
     // e autenticazione di accesso agli endpoint dell applicazione
     @Bean
     @Order(1)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
+    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http, GenerateToken generateToken)
             throws Exception {
+
+
         OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
                 OAuth2AuthorizationServerConfigurer.authorizationServer();
 
@@ -75,6 +78,9 @@ public class ConfigurationFile {
                     config.setAllowCredentials(true);
                     return config;
                 }))
+
+                // controllo del token ad ogni richiesta in arrivo sul server
+                .addFilterBefore(new JwtAuthFilter(generateToken), UsernamePasswordAuthenticationFilter.class) // Aggiunta filtro JWT
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
                 .with(authorizationServerConfigurer, (authorizationServer) ->
                         authorizationServer
@@ -82,7 +88,7 @@ public class ConfigurationFile {
                 )
                 .authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers("/auth/login","/auth/register").permitAll()
+                                .requestMatchers("/auth/login", "/auth/register").permitAll()
                                 .anyRequest().authenticated()
                 )
 
@@ -98,22 +104,22 @@ public class ConfigurationFile {
         return http.build();
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
-            throws Exception {
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
-                )
-                // Form login handles the redirect to the login page from the
-                // authorization server filter chain
-                // se impostato di default ti fornisce gia un form html da utilizzare
-                // altrimenti puo essere fornito un form html personalizzato
-                .formLogin(Customizer.withDefaults());
-
-        return http.build();
-    }
+//    @Bean
+//    @Order(2)
+//    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
+//            throws Exception {
+//        http
+//                .authorizeHttpRequests((authorize) -> authorize
+//                        .anyRequest().authenticated()
+//                );
+//        // Form login handles the redirect to the login page from the
+//        // authorization server filter chain
+//        // se impostato di default ti fornisce gia un form html da utilizzare
+//        // altrimenti puo essere fornito un form html personalizzato
+//        // .formLogin(Customizer.withDefaults());
+//
+//        return http.build();
+//    }
 
 //    @Bean
 //    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
@@ -185,6 +191,11 @@ public class ConfigurationFile {
     @Bean
     public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean

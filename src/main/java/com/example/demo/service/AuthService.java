@@ -12,8 +12,14 @@ import com.example.demo.interfaces.IAuthService;
 import com.example.demo.repository.AnagraficaRepository;
 import com.example.demo.repository.App_UserRepository;
 import com.example.demo.security.GenerateToken;
+import com.example.demo.utility.adapter.CustomUserDetail;
 import com.example.demo.utility.exception.InvalidCredentialsException;
 import com.example.demo.utility.factory.Factory;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,18 +35,28 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
     private final AnagraficaRepository anagraficaRepository;
     private final Factory factory;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
+    // serve per eseguire il processo di autenticazione dell utente che sta facendo login
+    private final AuthenticationManager authenticationManager;
+
+    // classe per la generazione del token
     private final GenerateToken generateToken;
 
     public AuthService(App_UserRepository appUserRepository,
                        AnagraficaRepository anagraficaRepository,
                        Factory factory,
                        PasswordEncoder passwordEncoder,
+                       UserDetailsService userDetailsService,
+                       AuthenticationManager authenticationManager,
                        GenerateToken generateToken
+
     ) {
         this.appUserRepository = appUserRepository;
         this.anagraficaRepository = anagraficaRepository;
         this.factory = factory;
         this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
         this.generateToken = generateToken;
     }
 
@@ -84,11 +100,17 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
                         this.passwordMatch(dataLogin.getPassword(), dataLogin.getUsername())
         ) {
 
-            // prendi i dati utente e crea il token
-            // ritorna il token
-           return new StringResponse(
-                   this.generateToken.generateToken(this.getUserByUsername(dataLogin.getUsername()))
-           );
+            // mi collego alla classe iniettata come bean nella configuration per ottenere
+            // la "porta" a cui passare i dati dell utente che si sta logando per controllare che siano validi
+            // metodo per l'autenticazione utente
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(dataLogin.getUsername(), dataLogin.getPassword())
+            );
+
+            CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+            App_User user = userDetails.getAppUser();
+            String token = this.generateToken.generateToken(user);
+            return new StringResponse(token);
         }
 
 
