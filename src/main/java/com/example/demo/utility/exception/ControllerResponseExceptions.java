@@ -35,4 +35,11 @@ public class ControllerResponseExceptions {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    // se viene lanciato errore alla login (custom errore)
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<StringResponse> handleInvalidCredentialException(InvalidCredentialsException ex){
+        return new ResponseEntity<>(new StringResponse(ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

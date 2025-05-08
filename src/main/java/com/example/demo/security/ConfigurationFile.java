@@ -33,6 +33,7 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -81,6 +82,7 @@ public class ConfigurationFile {
                 )
                 .authorizeHttpRequests((authorize) ->
                         authorize
+                                .requestMatchers("/auth/login","/auth/register").permitAll()
                                 .anyRequest().authenticated()
                 )
 

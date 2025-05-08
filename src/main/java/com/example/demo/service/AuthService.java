@@ -11,6 +11,8 @@ import com.example.demo.interfaces.BasicCrud;
 import com.example.demo.interfaces.IAuthService;
 import com.example.demo.repository.AnagraficaRepository;
 import com.example.demo.repository.App_UserRepository;
+import com.example.demo.security.GenerateToken;
+import com.example.demo.utility.exception.InvalidCredentialsException;
 import com.example.demo.utility.factory.Factory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,16 +29,19 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
     private final AnagraficaRepository anagraficaRepository;
     private final Factory factory;
     private final PasswordEncoder passwordEncoder;
+    private final GenerateToken generateToken;
 
     public AuthService(App_UserRepository appUserRepository,
                        AnagraficaRepository anagraficaRepository,
                        Factory factory,
-                       PasswordEncoder passwordEncoder
+                       PasswordEncoder passwordEncoder,
+                       GenerateToken generateToken
     ) {
         this.appUserRepository = appUserRepository;
         this.anagraficaRepository = anagraficaRepository;
         this.factory = factory;
         this.passwordEncoder = passwordEncoder;
+        this.generateToken = generateToken;
     }
 
 
@@ -80,11 +85,14 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
         ) {
 
             // prendi i dati utente e crea il token
-            return null;
+            // ritorna il token
+           return new StringResponse(
+                   this.generateToken.generateToken(this.getUserByUsername(dataLogin.getUsername()))
+           );
         }
 
 
-        return null;
+        throw new InvalidCredentialsException("credenziali invalide o errate.");
     }
 
     // controlla se l'utente esiste nel db e ritorna un booleano
