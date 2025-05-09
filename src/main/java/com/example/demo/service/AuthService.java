@@ -71,6 +71,7 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
                         data.getPassword()
                 ));
 
+        App_User savedUser = this.appUserRepository.save(user);
         // creazione anagrafica tramite factory
         Anagrafica anagrafica = this.factory.createEntityAnagrafica(
                 new CreateAnagraficaDTO(
@@ -80,15 +81,16 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
                         data.getDataNascita(),
                         data.getLuogoNascita(),
                         data.getTelefono(),
-                        user
+                        savedUser
                 )
         );
 
+        Anagrafica updatedAnagrafica = this.anagraficaRepository.save(anagrafica);
         // aggiunta dell oggetto anagrafica all entity user (relazione bidirezionale)
-        App_User updatedUser = this.factory.addAnagraficaToUser(anagrafica, user);
+        App_User updatedUser = this.factory.addAnagraficaToUser(updatedAnagrafica, savedUser);
 
         // salvataggio entity
-        this.anagraficaRepository.save(anagrafica);
+        this.anagraficaRepository.save(updatedAnagrafica);
         this.appUserRepository.save(updatedUser);
     }
 

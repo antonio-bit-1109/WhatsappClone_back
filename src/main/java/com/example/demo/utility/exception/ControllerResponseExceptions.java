@@ -1,6 +1,8 @@
 package com.example.demo.utility.exception;
 
 import com.example.demo.dto.responses.StringResponse;
+import org.hibernate.TransientObjectException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -38,6 +40,19 @@ public class ControllerResponseExceptions {
     // se viene lanciato errore alla login (custom errore)
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<StringResponse> handleInvalidCredentialException(InvalidCredentialsException ex){
+        return new ResponseEntity<>(new StringResponse(ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(TransientObjectException.class)
+    public ResponseEntity<StringResponse> handleTransientException(TransientObjectException ex){
+        return new ResponseEntity<>(new StringResponse(ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //exception generata quando si viola una constrain del database (campi unique o chiavi non rispettate)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<StringResponse> handleConstraintViolation(ConstraintViolationException ex){
         return new ResponseEntity<>(new StringResponse(ex.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
