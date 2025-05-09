@@ -7,6 +7,5 @@ import com.example.demo.entity.App_User;
 
 public interface EntityFactory {
     App_User createEntityUser(CreateUserDTO data);
-
     Anagrafica createEntityAnagrafica(CreateAnagraficaDTO data);
 }
