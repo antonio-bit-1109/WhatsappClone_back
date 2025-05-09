@@ -8,7 +8,6 @@ import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
-import com.example.demo.interfaces.BaseEntity;
 import com.example.demo.interfaces.BasicCrud;
 import com.example.demo.interfaces.IAuthService;
 import com.example.demo.repository.AnagraficaRepository;
@@ -25,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +31,8 @@ import java.util.Optional;
 // tutti gli oggeti che vengono passati
 // dal controller al service
 @Service
-public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO, Long, GetUserDTO> {
+public class AuthService implements IAuthService,
+        BasicCrud<UserRegistrationDTO, Long, GetUserDTO, StringResponse> {
 
     private final App_UserRepository appUserRepository;
     private final AnagraficaRepository anagraficaRepository;
@@ -125,6 +124,50 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO,
         throw new InvalidCredentialsException("credenziali invalide o errate.");
     }
 
+
+    @Override
+    public void edit() {
+
+    }
+
+    @Override
+    public StringResponse delete(Long idUser) {
+        App_User user = this.getUserById(idUser);
+
+        if (this.userAlreadyInactive(user)) {
+            return new StringResponse("utente già disattivato");
+        }
+
+        user.setIsEnabled(false);
+        this.appUserRepository.save(user);
+        return new StringResponse("utente disattivato con successo");
+    }
+
+    @Override
+    public GetUserDTO get(Long idUser) {
+        // prendo le entity da mappare
+        App_User user = this.getUserById(idUser);
+        Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUser(user);
+
+        // le passo al mapper per essere mappate
+        return this.modelMapper.fromEntityToDto(user, anagrafica);
+
+    }
+
+    @Override
+    public List<GetUserDTO> getAll() {
+
+        return this.appUserRepository.findAll()
+                .stream()
+                .map(user -> {
+                    Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUser(user);
+                    return this.modelMapper.fromEntityToDto(user, anagrafica);
+                }).toList();
+    }
+
+
+    // METODI ACCESSORI PER LE OPERAZIONI EFFETTUATE
+
     // controlla se l'utente esiste nel db e ritorna un booleano
     @Override
     public boolean userExistByUsername(String username) {
@@ -164,37 +207,10 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO,
         return optUser.get();
     }
 
-
+    // check if user is inactive
     @Override
-    public void edit() {
-
+    public boolean userAlreadyInactive(App_User user) {
+        return !user.getIsEnabled();
     }
-
-    @Override
-    public void delete() {
-
-    }
-
-    @Override
-    public GetUserDTO get(Long idUser) {
-        // prendo le entity da mappare
-        App_User user = this.getUserById(idUser);
-        Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUser(user);
-
-        // le passo in una lista
-        List<BaseEntity> listEntity = new ArrayList<>();
-        listEntity.add(user);
-        listEntity.add(anagrafica);
-
-        // le passo al mapper per essere mappate
-        return this.modelMapper.fromEntityToDto(user, anagrafica);
-
-    }
-
-    @Override
-    public void getAll() {
-
-    }
-
 
 }

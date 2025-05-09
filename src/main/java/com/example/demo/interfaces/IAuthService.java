@@ -18,4 +18,7 @@ public interface IAuthService {
     App_User getUserByUsername(String username);
 
     App_User getUserById(Long idUser);
+
+
+    boolean userAlreadyInactive(App_User user);
 }

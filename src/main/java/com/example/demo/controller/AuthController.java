@@ -39,4 +39,10 @@ public class AuthController {
     public ResponseEntity<?> getUser(@NotNull @PathVariable("idUser") Long IdUser) {
         return ResponseEntity.ok(this.authService.get(IdUser));
     }
+
+    // soft delete dell utente
+    @GetMapping("/delete/{idUser}")
+    public ResponseEntity<StringResponse> deleteUser(@NotNull @PathVariable("idUser") Long IdUser) {
+        return ResponseEntity.ok(this.authService.delete(IdUser));
+    }
 }
