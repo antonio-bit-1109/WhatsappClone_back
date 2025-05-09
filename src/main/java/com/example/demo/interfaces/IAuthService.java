@@ -16,4 +16,6 @@ public interface IAuthService {
     boolean passwordMatch(String rawPassword, String username);
 
     App_User getUserByUsername(String username);
+
+    App_User getUserById(Long idUser);
 }

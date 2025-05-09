@@ -49,27 +49,27 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
 //        return UserDetails.super.isAccountNonExpired();
-        return true;
+        return appUser.getIsAccountNotExpired();
     }
 
     //    Se false, l’account è bloccato (es. troppi tentativi falliti)
     @Override
     public boolean isAccountNonLocked() {
 //        return UserDetails.super.isAccountNonLocked();
-        return true;
+       return appUser.getIsAccountNotLocked();
     }
 
     //    Se false, le credenziali sono scadute (es. password da aggiornare)
     @Override
     public boolean isCredentialsNonExpired() {
 //        return UserDetails.super.isCredentialsNonExpired();
-        return true;
+        return appUser.getIsCredentialsNonExpired();
     }
 
     //    Se false, l’utente è disabilitato (es. non ha ancora confermato email)
     @Override
     public boolean isEnabled() {
 //        return UserDetails.super.isEnabled();
-        return true;
+        return appUser.getIsEnabled();
     }
 }

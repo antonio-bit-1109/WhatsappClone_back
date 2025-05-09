@@ -1,6 +1,8 @@
 package com.example.demo.dto.responses;
 
-public class StringResponse {
+import com.example.demo.interfaces.BaseResponse;
+
+public class StringResponse implements BaseResponse {
 
     private String message;
 

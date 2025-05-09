@@ -17,9 +17,53 @@ public class App_User implements BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false )
+    private boolean isAccountNotExpired;
+
+    @Column(nullable = false)
+    private boolean isAccountNotLocked;
+
+    @Column(nullable = false)
+    private boolean isCredentialsNonExpired;
+
+    @Column(nullable = false)
+    private boolean isEnabled;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Anagrafica anagrafica;
 
+
+    public boolean getIsAccountNotExpired() {
+        return isAccountNotExpired;
+    }
+
+    public void setAccountNotExpired(boolean accountNotExpired) {
+        isAccountNotExpired = accountNotExpired;
+    }
+
+    public boolean getIsAccountNotLocked() {
+        return isAccountNotLocked;
+    }
+
+    public void setAccountNotLocked(boolean accountNotLocked) {
+        isAccountNotLocked = accountNotLocked;
+    }
+
+    public boolean getIsCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
+    public boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+    public void setIsEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 
     public Anagrafica getAnagrafica() {
         return anagrafica;

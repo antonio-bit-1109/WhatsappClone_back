@@ -4,9 +4,11 @@ import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;
 import com.example.demo.dto.requests.appUser.LoginDTO;
 import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
+import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
+import com.example.demo.interfaces.BaseEntity;
 import com.example.demo.interfaces.BasicCrud;
 import com.example.demo.interfaces.IAuthService;
 import com.example.demo.repository.AnagraficaRepository;
@@ -14,50 +16,54 @@ import com.example.demo.repository.App_UserRepository;
 import com.example.demo.security.GenerateToken;
 import com.example.demo.utility.adapter.CustomUserDetail;
 import com.example.demo.utility.exception.InvalidCredentialsException;
+import com.example.demo.utility.exception.UserNotFound;
 import com.example.demo.utility.factory.Factory;
+import com.example.demo.utility.mapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 // nel tipo di BasicCrud vengono specificati
 // tutti gli oggeti che vengono passati
 // dal controller al service
 @Service
-public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO> {
+public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO, Long, GetUserDTO> {
 
     private final App_UserRepository appUserRepository;
     private final AnagraficaRepository anagraficaRepository;
     private final Factory factory;
     private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userDetailsService;
     // serve per eseguire il processo di autenticazione dell utente che sta facendo login
     private final AuthenticationManager authenticationManager;
 
     // classe per la generazione del token
     private final GenerateToken generateToken;
 
+    // implementazione concreta del mapper appUser
+    private final ModelMapper modelMapper;
+
     public AuthService(App_UserRepository appUserRepository,
                        AnagraficaRepository anagraficaRepository,
                        Factory factory,
                        PasswordEncoder passwordEncoder,
-                       UserDetailsService userDetailsService,
                        AuthenticationManager authenticationManager,
-                       GenerateToken generateToken
+                       GenerateToken generateToken,
+                       ModelMapper modelMapper
 
     ) {
         this.appUserRepository = appUserRepository;
         this.anagraficaRepository = anagraficaRepository;
         this.factory = factory;
         this.passwordEncoder = passwordEncoder;
-        this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         this.generateToken = generateToken;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -141,7 +147,18 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
         Optional<App_User> optUser = this.appUserRepository.getUserByIsUsername(username);
 
         if (optUser.isEmpty()) {
-            throw new RuntimeException("utente non presente nel db");
+            throw new UserNotFound("utente non presente nel db");
+        }
+
+        return optUser.get();
+    }
+
+    @Override
+    public App_User getUserById(Long idUser) {
+        Optional<App_User> optUser = this.appUserRepository.getApp_UsersById(idUser);
+
+        if (optUser.isEmpty()) {
+            throw new UserNotFound("utente non trovato");
         }
 
         return optUser.get();
@@ -159,7 +176,18 @@ public class AuthService implements IAuthService, BasicCrud<UserRegistrationDTO>
     }
 
     @Override
-    public void get() {
+    public GetUserDTO get(Long idUser) {
+        // prendo le entity da mappare
+        App_User user = this.getUserById(idUser);
+        Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUser(user);
+
+        // le passo in una lista
+        List<BaseEntity> listEntity = new ArrayList<>();
+        listEntity.add(user);
+        listEntity.add(anagrafica);
+
+        // le passo al mapper per essere mappate
+        return this.modelMapper.fromEntityToDto(user, anagrafica);
 
     }
 

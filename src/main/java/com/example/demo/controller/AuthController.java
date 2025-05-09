@@ -5,11 +5,9 @@ import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.service.AuthService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,6 +32,11 @@ public class AuthController {
     public ResponseEntity<StringResponse> login(
             @Valid @RequestBody LoginDTO loginData
     ) {
-      return ResponseEntity.ok(this.authService.login(loginData))  ;
+        return ResponseEntity.ok(this.authService.login(loginData));
+    }
+
+    @GetMapping("/get/{idUser}")
+    public ResponseEntity<?> getUser(@NotNull @PathVariable("idUser") Long IdUser) {
+        return ResponseEntity.ok(this.authService.get(IdUser));
     }
 }

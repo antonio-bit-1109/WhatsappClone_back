@@ -4,7 +4,7 @@ package com.example.demo.interfaces;
 import java.util.List;
 
 // i servizi implementeranno le basic crud per le crud base
-public interface BasicCrud<T> {
+public interface BasicCrud<T, K, R> {
 
     void create(T dataRegistration);
 
@@ -12,7 +12,7 @@ public interface BasicCrud<T> {
 
     void delete();
 
-    void get();
+    R get(K dataGet);
 
     void getAll();
 }

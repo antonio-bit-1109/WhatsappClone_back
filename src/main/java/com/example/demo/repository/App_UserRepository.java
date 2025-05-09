@@ -15,4 +15,6 @@ public interface App_UserRepository extends JpaRepository<App_User, Long> {
     @Query("select u from App_User u" +
             " where  u.username = :username")
     Optional<App_User> getUserByIsUsername(String username);
+
+    Optional<App_User> getApp_UsersById(Long id);
 }

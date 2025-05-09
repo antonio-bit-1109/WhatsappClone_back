@@ -57,4 +57,12 @@ public class ControllerResponseExceptions {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // se viene lanciata Exception user not found
+    // gestita da qui
+    @ExceptionHandler(UserNotFound.class)
+    public ResponseEntity<StringResponse> handleUserNotFound(UserNotFound ex){
+        return new ResponseEntity<>(new StringResponse(ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

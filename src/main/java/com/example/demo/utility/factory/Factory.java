@@ -2,9 +2,9 @@ package com.example.demo.utility.factory;
 
 import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;
+import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
-import com.example.demo.interfaces.EntityFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +23,10 @@ public class Factory implements EntityFactory {
         App_User user = new App_User();
         user.setUsername(data.getUsername());
         user.setPassword(this.passwordEncoder.encode(data.getPassword()));
+        user.setAccountNotExpired(true);
+        user.setAccountNotLocked(true);
+        user.setIsEnabled(true);
+        user.setCredentialsNonExpired(true);
         return user;
     }
 
@@ -38,6 +42,7 @@ public class Factory implements EntityFactory {
         a.setUser(data.getUser());
         return a;
     }
+
 
     public App_User addAnagraficaToUser(
             Anagrafica anagrafica,
