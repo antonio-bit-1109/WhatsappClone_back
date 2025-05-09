@@ -2,12 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.requests.appUser.LoginDTO;
 import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
+import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.service.AuthService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -44,5 +47,10 @@ public class AuthController {
     @GetMapping("/delete/{idUser}")
     public ResponseEntity<StringResponse> deleteUser(@NotNull @PathVariable("idUser") Long IdUser) {
         return ResponseEntity.ok(this.authService.delete(IdUser));
+    }
+
+    @GetMapping("/get/all")
+    public ResponseEntity<List<GetUserDTO>> getAll() {
+        return ResponseEntity.ok(this.authService.getAll());
     }
 }

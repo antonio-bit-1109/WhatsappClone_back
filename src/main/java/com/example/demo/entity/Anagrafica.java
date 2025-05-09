@@ -31,9 +31,9 @@ public class Anagrafica implements BaseEntity {
     private String cognome;
 
     @OneToOne(mappedBy = "anagrafica")
+    @JoinColumn(name = "id_user")
     private App_User appUser;
-
-
+    
     public Long getId() {
         return id;
     }
