@@ -15,6 +15,7 @@ import com.example.demo.utility.exception.InvalidCredentialsException;
 import com.example.demo.utility.exception.UserNotFound;
 import com.example.demo.utility.factory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 // nel tipo di BasicCrud vengono specificati
 // tutti gli oggetti che vengono passati
@@ -43,6 +48,10 @@ public class AuthService implements IAuthService,
 
     // implementazione concreta del mapper appUser
     private final ModelMapper modelMapper;
+
+    // chiamata al logger statico predefinito di spring
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
 
     public AuthService(App_UserRepository appUserRepository,
                        AnagraficaRepository anagraficaRepository,
@@ -94,6 +103,11 @@ public class AuthService implements IAuthService,
         // salvataggio entity
         this.anagraficaRepository.save(updatedAnagrafica);
         this.appUserRepository.save(updatedUser);
+        logger.atInfo().log(
+                String.format("registrazione utente effettuata con successo: id: %s, username: %s -- /auth/register.",
+                        updatedUser.getId(),
+                        updatedUser.getUsername()
+                ));
     }
 
     @Override
@@ -105,6 +119,11 @@ public class AuthService implements IAuthService,
         userAnagrafica.setCognome(dataEdit.getCognome());
         userAnagrafica.setLuogoDiNascita(dataEdit.getLuogoDiNascita());
         this.anagraficaRepository.save(userAnagrafica);
+        logger.atInfo().log(
+                String.format("modifica dati anagrafica utente effettuata con successo  id: %s, username: %s -- /auth/edit.",
+                        user.getId(),
+                        user.getUsername()
+                ));
         return new StringResponse("dati utente salvati con successo.");
     }
 
@@ -126,6 +145,11 @@ public class AuthService implements IAuthService,
             CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
             App_User user = userDetails.getAppUser();
             String token = this.generateToken.generateToken(user);
+            logger.atInfo().log(
+                    String.format("login utente effettuata con successo  id: %s, username: %s -- /auth/login.",
+                            user.getId(),
+                            user.getUsername()
+                    ));
             return new StringResponse(token);
         }
 
@@ -138,11 +162,22 @@ public class AuthService implements IAuthService,
         App_User user = this.getUserById(idUser);
 
         if (this.userAlreadyInactive(user)) {
+            logger.atInfo().log(
+                    String.format("disattivazione utente non necessaria, utente già inattivo.  id: %s, username: %s -- /auth/delete/{idUser}.",
+                            user.getId(),
+                            user.getUsername()
+                    ));
             return new StringResponse("utente già disattivato");
         }
 
         user.setIsEnabled(false);
         this.appUserRepository.save(user);
+        logger.atInfo().log(
+                String.format("disattivazione utente effettuata con successo  id: %s, username: %s -- /auth/delete/{idUser}.",
+                        user.getId(),
+                        user.getUsername()
+                ));
+
         return new StringResponse("utente disattivato con successo");
     }
 
@@ -152,7 +187,13 @@ public class AuthService implements IAuthService,
         App_User user = this.getUserById(idUser);
         Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUserID(user.getId());
 
+        // loggo l'attività svolta e
         // le passo al mapper per essere mappate
+        logger.atInfo().log(
+                String.format("get utente id: %s, username: %s -- /auth/get/{idUser}.",
+                        user.getId(),
+                        user.getUsername()
+                ));
         return this.modelMapper.fromEntityToDto(user, anagrafica);
 
     }
@@ -165,6 +206,11 @@ public class AuthService implements IAuthService,
                 .map(user -> {
                     Anagrafica anagrafica = this.anagraficaRepository
                             .getAnagraficaByAppUserID(user.getId());
+                    logger.atInfo().log(
+                            String.format("get all utenti  id: %s, username: %s -- /auth/get/all.",
+                                    user.getId(),
+                                    user.getUsername()
+                            ));
                     return this.modelMapper.fromEntityToDto(user, anagrafica);
                 }).toList();
     }
