@@ -6,3 +6,4 @@
 -[] controlla come funziona sonar
 -[] implementazioni logger per documentare gli avvenimenti
 -[] implementa un modo per salvare i logs in una tabella a parte e ripulire il file (ogni ora)
+(enum per il tipo di log)??
