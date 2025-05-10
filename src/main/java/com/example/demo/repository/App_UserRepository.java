@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface App_UserRepository extends JpaRepository<App_User, Long> {
-    List<App_User> getApp_UserByUsername(String username);
 
     @Query("select u from App_User u" +
             " where  u.username = :username")
     Optional<App_User> getUserByIsUsername(String username);
 
-    Optional<App_User> getApp_UsersById(Long id);
+    @Query(" select u from App_User u where u.id = :id")
+    Optional<App_User> getApp_UserById(Long id);
 }

@@ -147,7 +147,7 @@ public class AuthService implements IAuthService,
     public GetUserDTO get(Long idUser) {
         // prendo le entity da mappare
         App_User user = this.getUserById(idUser);
-        Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUser(user);
+        Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUserID(user.getId());
 
         // le passo al mapper per essere mappate
         return this.modelMapper.fromEntityToDto(user, anagrafica);
@@ -160,7 +160,8 @@ public class AuthService implements IAuthService,
         return this.appUserRepository.findAll()
                 .stream()
                 .map(user -> {
-                    Anagrafica anagrafica = this.anagraficaRepository.getAnagraficaByAppUser(user);
+                    Anagrafica anagrafica = this.anagraficaRepository
+                            .getAnagraficaByAppUserID(user.getId());
                     return this.modelMapper.fromEntityToDto(user, anagrafica);
                 }).toList();
     }
@@ -198,7 +199,7 @@ public class AuthService implements IAuthService,
 
     @Override
     public App_User getUserById(Long idUser) {
-        Optional<App_User> optUser = this.appUserRepository.getApp_UsersById(idUser);
+        Optional<App_User> optUser = this.appUserRepository.getApp_UserById(idUser);
 
         if (optUser.isEmpty()) {
             throw new UserNotFound("utente non trovato");

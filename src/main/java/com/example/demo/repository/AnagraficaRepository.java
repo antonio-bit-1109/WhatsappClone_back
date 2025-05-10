@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AnagraficaRepository extends JpaRepository<Anagrafica, Long> {
 
-    @Query("select a from Anagrafica a ")
-    Anagrafica getAnagraficaByAppUser(App_User appUser);
+    @Query("select a from Anagrafica a where a.appUser.id = :appUserId")
+    Anagrafica getAnagraficaByAppUserID(Long appUserId);
 }
