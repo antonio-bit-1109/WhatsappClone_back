@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 // nel tipo di BasicCrud vengono specificati
-// tutti gli oggeti che vengono passati
+// tutti gli oggetti che vengono passati
 // dal controller al service
 @Service
 public class AuthService implements IAuthService,
