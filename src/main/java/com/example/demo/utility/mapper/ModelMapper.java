@@ -3,11 +3,8 @@ package com.example.demo.utility.mapper;
 import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
-import com.example.demo.interfaces.BaseEntity;
-import com.example.demo.interfaces.BaseResponse;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Component
 public class ModelMapper implements IModelMapper {
@@ -25,6 +22,7 @@ public class ModelMapper implements IModelMapper {
         dto.setUsername(user.getUsername());
         dto.setNome(anagrafica.getNome());
         dto.setCognome(anagrafica.getCognome());
+        dto.setLuogoNascita(anagrafica.getLuogoDiNascita());
         return dto;
     }
 

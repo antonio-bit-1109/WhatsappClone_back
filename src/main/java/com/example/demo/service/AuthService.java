@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
-import com.example.demo.dto.requests.appUser.CreateUserDTO;
-import com.example.demo.dto.requests.appUser.LoginDTO;
-import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
+import com.example.demo.dto.requests.appUser.*;
 import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.entity.Anagrafica;
@@ -32,7 +29,7 @@ import java.util.Optional;
 // dal controller al service
 @Service
 public class AuthService implements IAuthService,
-        BasicCrud<UserRegistrationDTO, Long, GetUserDTO, StringResponse> {
+        BasicCrud<UserRegistrationDTO, Long, GetUserDTO, StringResponse, EditUserDTO> {
 
     private final App_UserRepository appUserRepository;
     private final AnagraficaRepository anagraficaRepository;
@@ -82,10 +79,10 @@ public class AuthService implements IAuthService,
                 new CreateAnagraficaDTO(
                         data.getNome(),
                         data.getCognome(),
-                        data.getCf(),
+                        data.getCf().toUpperCase(),
                         data.getDataNascita(),
                         data.getLuogoNascita(),
-                        data.getTelefono(),
+                        "+39" + data.getTelefono(),
                         savedUser
                 )
         );
@@ -97,6 +94,18 @@ public class AuthService implements IAuthService,
         // salvataggio entity
         this.anagraficaRepository.save(updatedAnagrafica);
         this.appUserRepository.save(updatedUser);
+    }
+
+    @Override
+    public StringResponse edit(EditUserDTO dataEdit) {
+        App_User user = this.getUserById(dataEdit.getIdUser());
+        Anagrafica userAnagrafica = user.getAnagrafica();
+        userAnagrafica.setTelefono(dataEdit.getTelefono());
+        userAnagrafica.setNome(dataEdit.getNome());
+        userAnagrafica.setCognome(dataEdit.getCognome());
+        userAnagrafica.setLuogoDiNascita(dataEdit.getLuogoDiNascita());
+        this.anagraficaRepository.save(userAnagrafica);
+        return new StringResponse("dati utente salvati con successo.");
     }
 
     @Override
@@ -122,12 +131,6 @@ public class AuthService implements IAuthService,
 
 
         throw new InvalidCredentialsException("credenziali invalide o errate.");
-    }
-
-
-    @Override
-    public void edit() {
-
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.requests.appUser.EditUserDTO;
 import com.example.demo.dto.requests.appUser.LoginDTO;
 import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
 import com.example.demo.dto.responses.GetUserDTO;
@@ -52,5 +53,12 @@ public class AuthController {
     @GetMapping("/get/all")
     public ResponseEntity<List<GetUserDTO>> getAll() {
         return ResponseEntity.ok(this.authService.getAll());
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<?> editUser(
+            @Valid @RequestBody EditUserDTO dataEdit
+    ) {
+        return ResponseEntity.ok(this.authService.edit(dataEdit));
     }
 }
