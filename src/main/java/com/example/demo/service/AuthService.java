@@ -108,7 +108,7 @@ public class AuthService implements IAuthService,
         ) {
 
             // mi collego alla classe iniettata come bean nella configuration per ottenere
-            // la "porta" a cui passare i dati dell utente che si sta logando per controllare che siano validi
+            // la "porta" a cui passare i dati dell utente che si sta caricando per controllare che siano validi
             // metodo per l'autenticazione utente
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dataLogin.getUsername(), dataLogin.getPassword())
@@ -208,7 +208,7 @@ public class AuthService implements IAuthService,
         return optUser.get();
     }
 
-    // check if user is inactive
+    // check if the user is inactive
     @Override
     public boolean userAlreadyInactive(App_User user) {
         return !user.getIsEnabled();
