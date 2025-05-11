@@ -1,5 +1,6 @@
 package com.example.demo.utility.extracting;
 
+import com.example.demo.enums.LogLevel;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,13 +12,36 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     private String message = null;
     private String threadName = null;
 
-    @Override
-    public void extractTimeStamp(String line) {
+    public static void main(String[] args) {
+        prova("2025-05-10T11:09:46.046+02:00  DEBUG 7928 --- [whatappClone] [main] c.example.demo.WhatappCloneApplication   : Starting WhatappCloneApplication using Java 17.0.12 with PID 7928 (C:\\Users\\Anton\\IdeaProjects\\WhatsappClone_back\\target\\classes started by Anton in C:\\Users\\Anton\\IdeaProjects\\WhatsappClone_back)\n");
+    }
+
+
+    // test per i metodi da implementare
+    public static void prova(String line) {
 
     }
 
+    // estrarre il timestamp del log
+    @Override
+    public void extractTimeStamp(String line) {
+        setTimeStamp(line.substring(0, line.indexOf(" ")));
+    }
+
+    // estrarre il tipo di log dalla riga di log
     @Override
     public void extractLogType(String line) {
+
+        if (LogLevel.checkIfStringContainsLogLevel(line)) {
+            setLogType(
+                    line.substring(
+                            line.indexOf(" "),
+                            line.indexOf(LogLevel.returnWhichLevel(line)) + LogLevel.returnWhichLevel(line).length())
+            );
+
+        } else {
+            setLogType("N/A");
+        }
 
     }
 
