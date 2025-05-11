@@ -5,8 +5,14 @@ import com.example.demo.dto.requests.appUser.CreateUserDTO;
 import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
+import com.example.demo.entity.StorageLogs;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class Factory implements EntityFactory {
@@ -43,6 +49,18 @@ public class Factory implements EntityFactory {
         return a;
     }
 
+    @Override
+    public StorageLogs createEntityStorageLog(
+            String timeStamp,
+            String logType,
+            Integer processId,
+            String message,
+            String threadName
+    ) {
+        ZonedDateTime zdt = ZonedDateTime.parse(timeStamp);
+        return new StorageLogs(threadName, message, processId, logType, zdt);
+    }
+
 
     public App_User addAnagraficaToUser(
             Anagrafica anagrafica,
@@ -51,4 +69,6 @@ public class Factory implements EntityFactory {
         user.setAnagrafica(anagrafica);
         return user;
     }
+
+
 }

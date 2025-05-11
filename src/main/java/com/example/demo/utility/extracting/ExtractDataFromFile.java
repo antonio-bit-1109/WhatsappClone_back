@@ -1,6 +1,9 @@
 package com.example.demo.utility.extracting;
 
+import com.example.demo.entity.StorageLogs;
 import com.example.demo.enums.LogLevel;
+import com.example.demo.repository.StorageLogsRepository;
+import com.example.demo.utility.factory.Factory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,15 +15,21 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     private String message = null;
     private String threadName = null;
 
-    public static void main(String[] args) {
-        prova("2025-05-10T11:09:46.046+02:00  DEBUG 7928 --- [whatappClone] [main] c.example.demo.WhatappCloneApplication   : Starting WhatappCloneApplication using Java 17.0.12 with PID 7928 (C:\\Users\\Anton\\IdeaProjects\\WhatsappClone_back\\target\\classes started by Anton in C:\\Users\\Anton\\IdeaProjects\\WhatsappClone_back)\n");
+    private Factory factory;
+    private final StorageLogsRepository storageLogsRepository;
+
+    public ExtractDataFromFile(StorageLogsRepository storageLogsRepository) {
+        this.storageLogsRepository = storageLogsRepository;
     }
 
-
-    // test per i metodi da implementare
-    public static void prova(String line) {
-
+    public void resetValues() {
+        setMessage(null);
+        setThreadName(null);
+        setProcessId(null);
+        setLogType(null);
+        setTimeStamp(null);
     }
+
 
     // estrarre il timestamp del log
     @Override
@@ -49,20 +58,55 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     @Override
     public void extractProcessId(String line) {
 
-    }
+        setProcessId(
+                Integer.parseInt(
+                        line.substring(
+                                line.indexOf("---") - 5,
+                                line.indexOf("---") - 1
+                        )
+                )
 
-    @Override
-    public void extractMessage(String line) {
+        );
 
     }
 
     @Override
     public void extractThreadName(String line) {
+        String port = System.getenv("PORT");
+
+        if (port != null) {
+            setThreadName(
+                    line.substring(
+                            line.indexOf(port) - 10,
+                            line.indexOf(port) + 11
+                    )
+
+            );
+        }
 
     }
 
     @Override
+    public void extractMessage(String line) {
+        setMessage(
+                line.substring(
+                        line.indexOf(" : ")
+                )
+        );
+    }
+
+
+    @Override
     public void BuildRecordForDb() {
+        StorageLogs entity = this.factory.createEntityStorageLog(
+                getTimeStamp(),
+                getLogType(),
+                getProcessId(),
+                getMessage(),
+                getThreadName()
+        );
+        this.resetValues();
+        this.storageLogsRepository.save(entity);
 
     }
 

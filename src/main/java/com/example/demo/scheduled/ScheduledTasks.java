@@ -18,7 +18,7 @@ public class ScheduledTasks {
     }
 
 
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRate = 60000)
     public void StoreAndDeleteLogs() {
 
         try {
@@ -34,7 +34,7 @@ public class ScheduledTasks {
                 this.extractDataFromFile.extractLogType(line);
                 this.extractDataFromFile.extractProcessId(line);
                 this.extractDataFromFile.extractThreadName(line);
-
+                this.extractDataFromFile.BuildRecordForDb();
                 // read next line
                 line = reader.readLine();
             }

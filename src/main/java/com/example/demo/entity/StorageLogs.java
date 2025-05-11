@@ -6,6 +6,19 @@ import java.time.ZonedDateTime;
 
 @Entity
 public class StorageLogs {
+
+
+    public StorageLogs(String threadName, String message, Integer processId, String logType, ZonedDateTime timestamp) {
+        this.threadName = threadName;
+        this.message = message;
+        this.processId = processId;
+        this.logType = logType;
+        this.timestamp = timestamp;
+    }
+
+    public StorageLogs() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
