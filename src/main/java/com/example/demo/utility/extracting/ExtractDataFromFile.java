@@ -45,6 +45,7 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
 
     }
 
+    // estrarre il processId dalla linea di log
     @Override
     public void extractProcessId(String line) {
 
