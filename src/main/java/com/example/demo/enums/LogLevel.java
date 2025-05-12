@@ -59,11 +59,11 @@ public enum LogLevel {
         return atLeastOne.get();
     }
 
-    public static String returnWhichLevel(String line) {
+    public synchronized static String returnWhichLevel(String line) {
         return logToReturn;
     }
 
-    public void reset() {
-        logToReturn = null;
-    }
+//    public static void reset() {
+//        logToReturn = null;
+//    }
 }

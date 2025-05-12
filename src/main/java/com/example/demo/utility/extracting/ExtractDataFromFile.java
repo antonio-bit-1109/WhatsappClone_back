@@ -6,6 +6,11 @@ import com.example.demo.repository.StorageLogsRepository;
 import com.example.demo.utility.factory.Factory;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.util.regex.Pattern;
+
+import static org.springframework.security.config.http.MatcherType.regex;
+
 @Component
 public class ExtractDataFromFile implements IExtractDataFromFile {
 
@@ -15,11 +20,13 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     private String message = null;
     private String threadName = null;
 
-    private Factory factory;
+    private final Factory factory;
     private final StorageLogsRepository storageLogsRepository;
 
-    public ExtractDataFromFile(StorageLogsRepository storageLogsRepository) {
+    public ExtractDataFromFile(Factory factory, StorageLogsRepository storageLogsRepository) {
+        this.factory = factory;
         this.storageLogsRepository = storageLogsRepository;
+
     }
 
     public void resetValues() {
@@ -34,7 +41,22 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     // estrarre il timestamp del log
     @Override
     public void extractTimeStamp(String line) {
-        setTimeStamp(line.substring(0, line.indexOf(" ")));
+        // estraggo il valore timestamp
+        String timeStamp = line.substring(0, line.indexOf(" "));
+
+        // controllo che il valore estratto sia campatibile con un timestamp
+        String regexValidTimestamp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?(Z|[+-]\\d{2}:\\d{2})?$";
+        Pattern pattern = Pattern.compile(regexValidTimestamp);
+
+        // e faccio il controllo
+        // se compatibile setto la variabile altrimento ritorno un valore default
+        if (pattern.matcher(timeStamp).matches()) {
+            setTimeStamp(timeStamp);
+        } else {
+            setTimeStamp("1970-01-01T00:00:00Z");
+
+        }
+
     }
 
     // estrarre il tipo di log dalla riga di log
@@ -48,8 +70,9 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
                             line.indexOf(LogLevel.returnWhichLevel(line)) + LogLevel.returnWhichLevel(line).length())
             );
 
+
         } else {
-            setLogType("N/A");
+            setLogType("null");
         }
 
     }
@@ -58,15 +81,20 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     @Override
     public void extractProcessId(String line) {
 
-        setProcessId(
-                Integer.parseInt(
-                        line.substring(
-                                line.indexOf("---") - 5,
-                                line.indexOf("---") - 1
-                        )
-                )
+        try {
+            setProcessId(
+                    Integer.parseInt(
+                            line.substring(
+                                    line.indexOf("---") - 5,
+                                    line.indexOf("---") - 1
+                            )
+                    )
 
-        );
+            );
+        } catch (NumberFormatException ex) {
+            setProcessId(-1);
+        }
+
 
     }
 
@@ -74,25 +102,34 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     public void extractThreadName(String line) {
         String port = System.getenv("PORT");
 
-        if (port != null) {
-            setThreadName(
-                    line.substring(
-                            line.indexOf(port) - 10,
-                            line.indexOf(port) + 11
-                    )
+        try {
+            if (port != null) {
+                setThreadName(
+                        line.substring(
+                                line.indexOf(port) - 10,
+                                line.indexOf(port) + 11
+                        )
 
-            );
+                );
+            }
+        } catch (IndexOutOfBoundsException ex) {
+            setThreadName("null");
         }
+
 
     }
 
     @Override
     public void extractMessage(String line) {
-        setMessage(
-                line.substring(
-                        line.indexOf(" : ")
-                )
-        );
+        try {
+            setMessage(
+                    line.substring(
+                            line.indexOf(" : ")
+                    )
+            );
+        } catch (IndexOutOfBoundsException ex) {
+            setMessage("null");
+        }
     }
 
 

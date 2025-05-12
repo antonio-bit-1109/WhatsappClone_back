@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Service
 public class Factory implements EntityFactory {
@@ -57,6 +58,7 @@ public class Factory implements EntityFactory {
             String message,
             String threadName
     ) {
+
         ZonedDateTime zdt = ZonedDateTime.parse(timeStamp);
         return new StorageLogs(threadName, message, processId, logType, zdt);
     }
