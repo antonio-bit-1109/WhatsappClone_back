@@ -46,7 +46,7 @@ public class ScheduledTasks {
             if (this.deletedFileLog()) {
                 logger.atInfo().log("cancellazione log effettuata con successo" + LocalDateTime.now());
             }
-            ;
+            
 
         } catch (IOException e) {
             logger.atError().log("errore durante la lettura del file di log per il salvataggio sul db" + e.getMessage());
