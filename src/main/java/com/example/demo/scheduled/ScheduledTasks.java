@@ -1,16 +1,12 @@
 package com.example.demo.scheduled;
 
-import com.example.demo.service.AuthService;
 import com.example.demo.utility.extracting.ExtractDataFromFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 
 @Component
@@ -25,7 +21,8 @@ public class ScheduledTasks {
     }
 
 
-    @Scheduled(fixedRate = 60000)
+    // salvataggio su db e cancellazione dei log ogni 6 ore
+    @Scheduled(fixedRate = 21600000)
     public void StoreAndDeleteLogs() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader("logging/application.log"))) {
@@ -46,6 +43,10 @@ public class ScheduledTasks {
                 line = reader.readLine();
             }
             logger.atInfo().log("file di log salvato sul db. --" + LocalDateTime.now());
+            if (this.deletedFileLog()) {
+                logger.atInfo().log("cancellazione log effettuata con successo" + LocalDateTime.now());
+            }
+            ;
 
         } catch (IOException e) {
             logger.atError().log("errore durante la lettura del file di log per il salvataggio sul db" + e.getMessage());
@@ -53,4 +54,13 @@ public class ScheduledTasks {
     }
 
 
+    private boolean deletedFileLog() {
+        try {
+            File logFile = new File("logging/application.log");
+            return logFile.delete();
+        } catch (SecurityException ex) {
+            logger.atError().log("errore durante la cancellazione del file di log, post salvataggio su db.");
+        }
+        return false;
+    }
 }

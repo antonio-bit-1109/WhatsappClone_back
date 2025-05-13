@@ -6,10 +6,9 @@ import com.example.demo.repository.StorageLogsRepository;
 import com.example.demo.utility.factory.Factory;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
+
 import java.util.regex.Pattern;
 
-import static org.springframework.security.config.http.MatcherType.regex;
 
 @Component
 public class ExtractDataFromFile implements IExtractDataFromFile {
@@ -65,7 +64,7 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
 
         if (LogLevel.checkIfStringContainsLogLevel(line)) {
             setLogType(
-                    line.substring(
+                    line.trim().substring(
                             line.indexOf(" "),
                             line.indexOf(LogLevel.returnWhichLevel(line)) + LogLevel.returnWhichLevel(line).length())
             );
@@ -78,19 +77,18 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     }
 
     // estrarre il processId dalla linea di log
+    // DA RIVEDERE
     @Override
     public void extractProcessId(String line) {
 
         try {
-            setProcessId(
-                    Integer.parseInt(
-                            line.substring(
-                                    line.indexOf("---") - 5,
-                                    line.indexOf("---") - 1
-                            )
-                    )
 
-            );
+            String sottoStringa = line.substring(0, line.indexOf("---")).trim();
+            int start = sottoStringa.lastIndexOf(" ");
+            String pidString = sottoStringa.substring(start).trim();
+            int pid = Integer.parseInt(pidString);
+            setProcessId(pid);
+
         } catch (NumberFormatException ex) {
             setProcessId(-1);
         }
@@ -98,20 +96,18 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
 
     }
 
+
+    // estrazione del nome del thread che ha eseguito l'operazione
     @Override
     public void extractThreadName(String line) {
-        String port = System.getenv("PORT");
-
         try {
-            if (port != null) {
-                setThreadName(
-                        line.substring(
-                                line.indexOf(port) - 10,
-                                line.indexOf(port) + 11
-                        )
 
-                );
-            }
+            String subString = line.substring(line.indexOf("]") + 1);
+            String threadName = subString.substring(0, subString.indexOf("]") + 1);
+
+            setThreadName(threadName);
+
+
         } catch (IndexOutOfBoundsException ex) {
             setThreadName("null");
         }

@@ -32,8 +32,8 @@ public class StorageLogs {
     @Column(nullable = false)
     private Integer processId;
 
-    @Lob
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
     @Column(nullable = false)
