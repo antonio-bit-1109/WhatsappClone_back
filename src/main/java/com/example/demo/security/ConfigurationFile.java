@@ -80,7 +80,6 @@ public class ConfigurationFile {
                 }))
 
                 // controllo del token ad ogni richiesta in arrivo sul server
-                .addFilterBefore(new JwtAuthFilter(generateToken), UsernamePasswordAuthenticationFilter.class) // Aggiunta filtro JWT
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
                 .with(authorizationServerConfigurer, (authorizationServer) ->
                         authorizationServer
@@ -89,6 +88,7 @@ public class ConfigurationFile {
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers("/auth/login", "/auth/register").permitAll()
+                                .requestMatchers("/auth/edit").authenticated()
                                 .anyRequest().authenticated()
                 )
 
@@ -99,7 +99,9 @@ public class ConfigurationFile {
                                 new LoginUrlAuthenticationEntryPoint("/login"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
-                );
+                )
+                .addFilterBefore(new JwtAuthFilter(generateToken), UsernamePasswordAuthenticationFilter.class); // Aggiunta filtro JWT
+
         // .addFilterBefore(new JWTAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

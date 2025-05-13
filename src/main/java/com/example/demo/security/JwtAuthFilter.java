@@ -1,5 +1,7 @@
 package com.example.demo.security;
 
+import com.example.demo.dto.responses.StringResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -29,6 +31,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
 
+    // metodo nel quale specificare quali metodi non devono essere filtrati perche in permitt all
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        // Specifica gli endpoint che non richiedono autenticazione (permitAll)
+        String requestURI = request.getRequestURI();
+        return requestURI.startsWith("/auth/login") ||
+                requestURI.startsWith("/auth/register");
+    }
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -37,6 +49,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            // Blocca le richieste senza token o con token malformato
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            StringResponse resp = new StringResponse("Token mancante o non valido");
+            response.setContentType("application/json");
+            ObjectMapper objectMapper = new ObjectMapper();
+            response.getWriter().write(objectMapper.writeValueAsString(resp));
+            return;
+        }
+
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7); // Rimuove "Bearer "
