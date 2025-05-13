@@ -17,7 +17,7 @@ public class App_User implements BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false )
+    @Column(nullable = false)
     private boolean isAccountNotExpired;
 
     @Column(nullable = false)
@@ -29,9 +29,20 @@ public class App_User implements BaseEntity {
     @Column(nullable = false)
     private boolean isEnabled;
 
+    @Column(nullable = false)
+    private String role;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Anagrafica anagrafica;
 
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public boolean getIsAccountNotExpired() {
         return isAccountNotExpired;

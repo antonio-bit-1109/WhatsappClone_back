@@ -11,11 +11,13 @@ import com.example.demo.repository.AnagraficaRepository;
 import com.example.demo.repository.App_UserRepository;
 import com.example.demo.security.GenerateToken;
 import com.example.demo.utility.adapter.CustomUserDetail;
+import com.example.demo.utility.exception.AdminAlreadyCreated;
 import com.example.demo.utility.exception.InvalidCredentialsException;
 import com.example.demo.utility.exception.UserNotFound;
 import com.example.demo.utility.factory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
 
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -73,6 +75,7 @@ public class AuthService implements IAuthService,
 
 
     @Override
+    @Transactional(rollbackOn = RuntimeException.class)
     public void create(UserRegistrationDTO data) {
 
         // creazione entity user tramite factory
@@ -80,7 +83,9 @@ public class AuthService implements IAuthService,
                 new CreateUserDTO(
                         data.getUsername(),
                         data.getPassword()
-                ));
+                ),
+                this.checkIfIsRegisteringAdmin(data)
+        );
 
         App_User savedUser = this.appUserRepository.save(user);
         // creazione anagrafica tramite factory
@@ -261,6 +266,45 @@ public class AuthService implements IAuthService,
     @Override
     public boolean userAlreadyInactive(App_User user) {
         return !user.getIsEnabled();
+    }
+
+
+    // controllo se sto creando un admin
+    // prima del controllo verifico che gia non ci sia un admin con lo specifico nome
+    // ci possono essere solo due admin ,
+    // uno che risponde a 'puzzoneSchifo' e l'altro che risponde a 'gnomoCacca'
+    @Override
+    public boolean checkIfIsRegisteringAdmin(UserRegistrationDTO data) {
+
+        if (data.getUsername().equals("puzzoneSchifo") && data.getPassword().equals("puzzoneSchifo")) {
+
+            if (this.checkIfThisAdminAlreadyCreated(data.getUsername())) {
+                throw new AdminAlreadyCreated("utente admin già creato");
+            } else {
+                return true;
+            }
+
+
+        }
+
+        if (data.getUsername().equals("gnomoCacca") && data.getPassword().equals("gnomoCacca")) {
+
+            if (this.checkIfThisAdminAlreadyCreated(data.getUsername())) {
+                throw new AdminAlreadyCreated("utente admin già creato");
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean checkIfThisAdminAlreadyCreated(String username) {
+        Optional<App_User> adminUser = this.appUserRepository.getAdminUserByUsername(username);
+
+        return adminUser.isPresent();
+
     }
 
 }

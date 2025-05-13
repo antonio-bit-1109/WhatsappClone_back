@@ -26,7 +26,7 @@ public class Factory implements EntityFactory {
     }
 
     @Override
-    public App_User createEntityUser(CreateUserDTO data) {
+    public App_User createEntityUser(CreateUserDTO data, boolean isRegisteringAdmin) {
         App_User user = new App_User();
         user.setUsername(data.getUsername());
         user.setPassword(this.passwordEncoder.encode(data.getPassword()));
@@ -34,6 +34,11 @@ public class Factory implements EntityFactory {
         user.setAccountNotLocked(true);
         user.setIsEnabled(true);
         user.setCredentialsNonExpired(true);
+        if (isRegisteringAdmin) {
+            user.setRole("ADMIN");
+        } else {
+            user.setRole("USER");
+        }
         return user;
     }
 

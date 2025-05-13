@@ -69,10 +69,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return;
             }
 
-            // se il token non viene trovato ritorna un unahutorized
-        } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
         }
 
         filterChain.doFilter(request, response);

@@ -73,4 +73,11 @@ public class ControllerResponseExceptions {
                 HttpStatus.BAD_REQUEST);
     }
 
+    // stai tentando di craere un admin con una username che gia esiste, non possibile.
+    @ExceptionHandler(AdminAlreadyCreated.class)
+    public ResponseEntity<StringResponse> handleUserNotFound(AdminAlreadyCreated ex) {
+        return new ResponseEntity<>(new StringResponse(ex.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
+
 }

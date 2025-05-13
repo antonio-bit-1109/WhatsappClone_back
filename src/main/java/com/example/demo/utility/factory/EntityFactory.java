@@ -7,7 +7,7 @@ import com.example.demo.entity.App_User;
 import com.example.demo.entity.StorageLogs;
 
 public interface EntityFactory {
-    App_User createEntityUser(CreateUserDTO data);
+    App_User createEntityUser(CreateUserDTO data, boolean isRegisteringAdmin);
 
     Anagrafica createEntityAnagrafica(CreateAnagraficaDTO data);
 
