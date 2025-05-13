@@ -88,6 +88,7 @@ public class ConfigurationFile {
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers("/auth/login", "/auth/register").permitAll()
+                                .requestMatchers("/auth/get/all").hasRole("ADMIN")
                                 .requestMatchers("/auth/edit").authenticated()
                                 .anyRequest().authenticated()
                 )

@@ -27,7 +27,7 @@ public class GenerateToken {
 
     public String generateToken(App_User user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", "USER"); // Aggiungi eventuali ruoli o informazioni extra
+        claims.put("role", user.getRole()); // Aggiungi eventuali ruoli o informazioni extra
         claims.put("id", user.getId());
 
         return Jwts.builder()
