@@ -89,7 +89,7 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
             int pid = Integer.parseInt(pidString);
             setProcessId(pid);
 
-        } catch (NumberFormatException ex) {
+        } catch (NumberFormatException | StringIndexOutOfBoundsException ex) {
             setProcessId(-1);
         }
 
@@ -120,7 +120,7 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
         try {
             setMessage(
                     line.substring(
-                            line.indexOf(" : ")
+                            line.indexOf(":")
                     )
             );
         } catch (IndexOutOfBoundsException ex) {

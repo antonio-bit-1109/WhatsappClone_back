@@ -23,6 +23,7 @@ public class ScheduledTasks {
 
     // salvataggio su db e cancellazione dei log ogni 6 ore
     @Scheduled(fixedRate = 21600000)
+//    @Scheduled(fixedRate = 60000)
     public void StoreAndDeleteLogs() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader("logging/application.log"))) {
@@ -46,7 +47,7 @@ public class ScheduledTasks {
             if (this.deletedFileLog()) {
                 logger.atInfo().log("cancellazione log effettuata con successo" + LocalDateTime.now());
             }
-            
+
 
         } catch (IOException e) {
             logger.atError().log("errore durante la lettura del file di log per il salvataggio sul db" + e.getMessage());
