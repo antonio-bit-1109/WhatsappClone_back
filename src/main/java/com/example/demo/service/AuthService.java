@@ -155,6 +155,8 @@ public class AuthService implements IAuthService,
                             user.getId(),
                             user.getUsername()
                     ));
+
+
             return new StringResponse(token);
         }
 
