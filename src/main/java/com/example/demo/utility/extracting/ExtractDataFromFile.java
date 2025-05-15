@@ -120,7 +120,7 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
         try {
             setMessage(
                     line.substring(
-                            line.indexOf(":")
+                            line.indexOf(" :")
                     )
             );
         } catch (IndexOutOfBoundsException ex) {
