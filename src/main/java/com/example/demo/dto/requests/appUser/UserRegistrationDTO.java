@@ -1,6 +1,7 @@
 package com.example.demo.dto.requests.appUser;
 
 import com.example.demo.interfaces.DtoInterface;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,6 +16,11 @@ public class UserRegistrationDTO implements DtoInterface {
     @NotNull(message = "la password non può essere null")
     @NotBlank(message = "la password non può essere vuota")
     private String password;
+
+    @NotNull(message = "la mail non può essere null")
+    @NotBlank(message = "la mail non può essere vuota")
+    @Email(message = "formato mail non valido.")
+    private String email;
 
     @NotNull(message = "il nome non può essere null")
     @NotBlank(message = "il nome non può essere vuoto")
@@ -46,7 +52,8 @@ public class UserRegistrationDTO implements DtoInterface {
                                String cf,
                                LocalDateTime dataNascita,
                                String luogoNascita,
-                               String telefono) {
+                               String telefono,
+                               String email) {
         this.username = username;
         this.password = password;
         this.nome = nome;
@@ -55,6 +62,7 @@ public class UserRegistrationDTO implements DtoInterface {
         this.dataNascita = dataNascita;
         this.luogoNascita = luogoNascita;
         this.telefono = telefono;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -119,5 +127,13 @@ public class UserRegistrationDTO implements DtoInterface {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

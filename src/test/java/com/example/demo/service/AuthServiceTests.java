@@ -45,13 +45,14 @@ public class AuthServiceTests {
                 "rzzntn95p11h501q",
                 LocalDateTime.of(1995, 9, 11, 0, 0), // data di nascita: 11/09/1995
                 "Roma", // luogo di nascita
-                "3331234567" // telefono
+                "3331234567",
+                "defaultemail@prova.it"// telefono
         );
 
         App_User userMock = new App_User();
         Anagrafica anagMock = new Anagrafica();
 
-        when(factory.createEntityUser(any(CreateUserDTO.class))).thenReturn(userMock);
+        when(factory.createEntityUser(any(CreateUserDTO.class), anyBoolean())).thenReturn(userMock);
 
         when(this.factory.createEntityAnagrafica(any(CreateAnagraficaDTO.class)))
                 .thenReturn(anagMock);

@@ -33,9 +33,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         return path.startsWith("/auth/login") ||
                 path.startsWith("/auth/register") ||
-                path.startsWith("/oauth2") || // consent, token, authorize ecc.
-                path.startsWith("/.well-known"); // openid-configuration, jwks ecc.
+                path.startsWith("/oauth2") ||      // Abilita endpoint OAuth2
+                path.startsWith("/.well-known");   // Necessario per OpenID Configuration
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -61,13 +62,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             String username = claims.getSubject();
             String role = (String) claims.get("role");
+            String id = (String) claims.get("id");
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 List<SimpleGrantedAuthority> authorities =
                         Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+                        new CustomUsernamePasswordAuthenticationToken(username, null, authorities, id);
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

@@ -2,18 +2,14 @@ package com.example.demo.utility.factory;
 
 import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;
-import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.entity.StorageLogs;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+
 
 @Service
 public class Factory implements EntityFactory {
@@ -34,6 +30,7 @@ public class Factory implements EntityFactory {
         user.setAccountNotLocked(true);
         user.setIsEnabled(true);
         user.setCredentialsNonExpired(true);
+        user.setEmail(data.getEmail());
         if (isRegisteringAdmin) {
             user.setRole("ADMIN");
         } else {

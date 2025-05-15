@@ -1,7 +1,9 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.AuthProvider;
 import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
+
 
 @Entity
 public class App_User implements BaseEntity {
@@ -16,6 +18,9 @@ public class App_User implements BaseEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private boolean isAccountNotExpired;
@@ -35,6 +40,34 @@ public class App_User implements BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private Anagrafica anagrafica;
 
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider = AuthProvider.LOCAL;
+
+    private String providerId;
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
 
     public String getRole() {
         return role;

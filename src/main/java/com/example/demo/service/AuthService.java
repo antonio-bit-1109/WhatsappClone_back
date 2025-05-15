@@ -82,7 +82,8 @@ public class AuthService implements IAuthService,
         App_User user = this.factory.createEntityUser(
                 new CreateUserDTO(
                         data.getUsername(),
-                        data.getPassword()
+                        data.getPassword(),
+                        data.getEmail()
                 ),
                 this.checkIfIsRegisteringAdmin(data)
         );
