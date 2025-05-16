@@ -31,6 +31,7 @@ public class Factory implements EntityFactory {
         user.setIsEnabled(true);
         user.setCredentialsNonExpired(true);
         user.setEmail(data.getEmail());
+        user.setProfileImage(null);
         if (isRegisteringAdmin) {
             user.setRole("ADMIN");
         } else {

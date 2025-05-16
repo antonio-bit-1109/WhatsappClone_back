@@ -19,7 +19,7 @@ public class App_User implements BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -30,6 +30,9 @@ public class App_User implements BaseEntity {
 
     @Column(nullable = false)
     private boolean isCredentialsNonExpired;
+
+    @Column(nullable = true)
+    private String profileImage;
 
     @Column(nullable = false)
     private boolean isEnabled;
@@ -44,6 +47,14 @@ public class App_User implements BaseEntity {
     private AuthProvider provider = AuthProvider.LOCAL;
 
     private String providerId;
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public void setEmail(String email) {
         this.email = email;

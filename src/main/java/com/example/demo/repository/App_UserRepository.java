@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +20,6 @@ public interface App_UserRepository extends JpaRepository<App_User, Long> {
     @Query("select u from App_User u" +
             " where  u.username = :username")
     Optional<App_User> getAdminUserByUsername(String username);
+
+    Optional<App_User> getUserByEmail(String email);
 }

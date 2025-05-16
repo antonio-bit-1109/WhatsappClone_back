@@ -12,16 +12,16 @@ public class Anagrafica implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime DataNascita;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String luogoDiNascita;
 
-    @Column(nullable = false, unique = true, length = 16)
+    @Column(nullable = true, unique = true, length = 16)
     private String cf;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String telefono;
 
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class Anagrafica implements BaseEntity {
     @OneToOne(mappedBy = "anagrafica")
     @JoinColumn(name = "id_user")
     private App_User appUser;
-    
+
     public Long getId() {
         return id;
     }

@@ -93,6 +93,15 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux -->
+        <!--        libreria per fare chiamate Api REST dIRETTAMENTE da srping boot ad un servizio esterno-->
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webflux</artifactId>
+            <version>6.2.6</version>
+        </dependency>
+
 
     </dependencies>
 

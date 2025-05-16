@@ -42,6 +42,8 @@ public class ConfigurationFile {
         return new BCryptPasswordEncoder();
     }
 
+
+    // nconfigurazione dei filtri spring per filtrare le richieste in entrata sul server
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -49,16 +51,17 @@ public class ConfigurationFile {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         //  .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/login", "/auth/register", "/oauth2/**").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers("/auth/get/all").hasRole("ADMIN")
                         .requestMatchers("/auth/edit").authenticated()
                         .anyRequest().authenticated()
                 )
+
+                // questa parte di filtro gestisce qualora venga chiamato oauth2 e venga inviata una richiesta di autorizzazione/auth tramite google
+                // la classe che gestisce la risposta sarà quella specificata in ".successHandler(oauth2SuccessHandler)"
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(auth -> auth
                                 .baseUri("/oauth2/authorization"))
-                        .redirectionEndpoint(red -> red
-                                .baseUri("/oauth2/callback/*"))
                         .successHandler(oauth2SuccessHandler)
                 )
 
@@ -67,7 +70,7 @@ public class ConfigurationFile {
 
         return http.build();
     }
-    
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

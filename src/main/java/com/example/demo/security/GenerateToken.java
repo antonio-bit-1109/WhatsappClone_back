@@ -5,7 +5,6 @@ import com.example.demo.entity.App_User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -29,6 +28,7 @@ public class GenerateToken {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getRole()); // Aggiungi eventuali ruoli o informazioni extra
         claims.put("id", user.getId());
+        claims.put("image", user.getProfileImage());
 
         return Jwts.builder()
                 .setClaims(claims)
