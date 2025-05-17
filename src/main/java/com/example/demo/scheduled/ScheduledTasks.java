@@ -9,6 +9,23 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.time.LocalDateTime;
 
+/**
+ * This class manages scheduled tasks related to log processing and database storage.
+ * It reads a log file, extracts log data, stores the extracted data in a database,
+ * and deletes the log file at a scheduled interval.
+ * <p>
+ * The class uses the {@link ExtractDataFromFile} component to extract individual log details
+ * such as timestamp, log type, process ID, thread name, and message from each log line.
+ * <p>
+ * Features:
+ * - Scheduled task to process and store log data every 6 hours.
+ * - Log file deletion after successful data storage to manage storage.
+ * - Error handling for file reading and deletion issues.
+ * <p>
+ * Dependencies:
+ * - {@code ExtractDataFromFile} for log data extraction.
+ * - Logger for logging process information and errors.
+ */
 @Component
 public class ScheduledTasks {
 
@@ -55,6 +72,14 @@ public class ScheduledTasks {
     }
 
 
+    /**
+     * Deletes the log file located at "logging/application.log".
+     * If the deletion is successful, the method returns true.
+     * In case of a security exception or failure to delete the file, it logs an error message
+     * and returns false.
+     *
+     * @return true if the file is successfully deleted, otherwise false
+     */
     private boolean deletedFileLog() {
         try {
             File logFile = new File("logging/application.log");

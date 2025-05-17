@@ -253,7 +253,7 @@ public class AuthService implements IAuthService,
 
         return optUser.get();
     }
-
+    
     @Override
     public App_User getUserById(Long idUser) {
         Optional<App_User> optUser = this.appUserRepository.getApp_UserById(idUser);
