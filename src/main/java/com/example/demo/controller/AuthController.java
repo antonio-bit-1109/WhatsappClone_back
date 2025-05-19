@@ -48,6 +48,7 @@ public class AuthController {
     public ResponseEntity<StringResponse> register(
             @Valid @RequestBody UserRegistrationDTO dataRegistration
     ) {
+
         this.authService.create(dataRegistration);
         return ResponseEntity.ok(new StringResponse("registrazione effettuata con successo."));
     }
