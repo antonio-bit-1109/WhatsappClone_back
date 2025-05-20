@@ -13,6 +13,7 @@ import com.example.demo.security.GenerateToken;
 import com.example.demo.utility.adapter.CustomUserDetail;
 import com.example.demo.utility.exception.AdminAlreadyCreated;
 import com.example.demo.utility.exception.InvalidCredentialsException;
+import com.example.demo.utility.exception.InvalidDataTemporalFormat;
 import com.example.demo.utility.exception.UserNotFound;
 import com.example.demo.utility.factory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
@@ -24,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +79,11 @@ public class AuthService implements IAuthService,
     @Override
     @Transactional(rollbackOn = RuntimeException.class)
     public void create(UserRegistrationDTO data) {
+
+        LocalDateTime now = LocalDateTime.now();
+        if (data.getDataNascita().isAfter(now)) {
+            throw new InvalidDataTemporalFormat(" Errore: data successiva alla data odierna.");
+        }
 
         // creazione entity user tramite factory
         App_User user = this.factory.createEntityUser(
