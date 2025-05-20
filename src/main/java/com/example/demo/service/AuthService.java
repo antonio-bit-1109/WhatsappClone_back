@@ -11,10 +11,7 @@ import com.example.demo.repository.AnagraficaRepository;
 import com.example.demo.repository.App_UserRepository;
 import com.example.demo.security.GenerateToken;
 import com.example.demo.utility.adapter.CustomUserDetail;
-import com.example.demo.utility.exception.AdminAlreadyCreated;
-import com.example.demo.utility.exception.InvalidCredentialsException;
-import com.example.demo.utility.exception.InvalidDataTemporalFormat;
-import com.example.demo.utility.exception.UserNotFound;
+import com.example.demo.utility.exception.*;
 import com.example.demo.utility.factory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
 
@@ -84,6 +81,13 @@ public class AuthService implements IAuthService,
         if (data.getDataNascita().isAfter(now)) {
             throw new InvalidDataTemporalFormat(" Errore: data successiva alla data odierna.");
         }
+
+        try {
+            long val = Long.parseLong(data.getTelefono());
+        } catch (NumberFormatException ex) {
+            throw new BadTelephoneFormat("formato numero telefono non valido.");
+        }
+
 
         // creazione entity user tramite factory
         App_User user = this.factory.createEntityUser(

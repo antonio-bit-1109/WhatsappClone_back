@@ -21,7 +21,7 @@ public class Anagrafica implements BaseEntity {
     @Column(nullable = true, unique = true, length = 16)
     private String cf;
 
-    @Column(nullable = true)
+    @Column(nullable = true, unique = true)
     private String telefono;
 
     @Column(nullable = false)
