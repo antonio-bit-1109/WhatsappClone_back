@@ -16,12 +16,23 @@ public class StoreMessages {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String text;
 
+    @Column(nullable = false)
+    private boolean haveReplied = false;
+
     public StoreMessages(String emailSender, String text) {
         this.emailSender = emailSender;
         this.text = text;
     }
 
     public StoreMessages() {
+    }
+
+    public boolean getHaveReplied() {
+        return this.haveReplied;
+    }
+
+    public void setHaveReplied(boolean haveReplied) {
+        this.haveReplied = haveReplied;
     }
 
     public Long getId() {
