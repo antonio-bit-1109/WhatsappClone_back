@@ -7,6 +7,7 @@ import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.entity.StorageLogs;
 import com.example.demo.entity.StoreMessages;
+import com.example.demo.enums.ProfileImage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class Factory implements EntityFactory {
         user.setIsEnabled(true);
         user.setCredentialsNonExpired(true);
         user.setEmail(data.getEmail());
-        user.setProfileImage(null);
+        user.setProfileImage(ProfileImage.DEFAULT.getSrc());
         if (isRegisteringAdmin) {
             user.setRole("ADMIN");
         } else {
