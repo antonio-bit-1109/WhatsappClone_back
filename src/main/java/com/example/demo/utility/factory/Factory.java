@@ -2,9 +2,11 @@ package com.example.demo.utility.factory;
 
 import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;
+import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.entity.StorageLogs;
+import com.example.demo.entity.StoreMessages;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,11 @@ public class Factory implements EntityFactory {
 
         ZonedDateTime zdt = ZonedDateTime.parse(timeStamp);
         return new StorageLogs(threadName, message, processId, logType, zdt);
+    }
+
+    @Override
+    public StoreMessages createEntityStoreMessage(SendMeMessageDTO data) {
+        return new StoreMessages(data.getSender(), data.getMessage());
     }
 
 

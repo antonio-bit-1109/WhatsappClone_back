@@ -7,11 +7,24 @@ import com.example.demo.utility.factory.Factory;
 import org.springframework.stereotype.Component;
 
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 
 @Component
-public class ExtractDataFromFile implements IExtractDataFromFile {
+public class ExtractData implements IExtractDataFromFile {
 
     private String timeStamp = null;
     private String logType = null;
@@ -22,7 +35,7 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
     private final Factory factory;
     private final StorageLogsRepository storageLogsRepository;
 
-    public ExtractDataFromFile(Factory factory, StorageLogsRepository storageLogsRepository) {
+    public ExtractData(Factory factory, StorageLogsRepository storageLogsRepository) {
         this.factory = factory;
         this.storageLogsRepository = storageLogsRepository;
 
@@ -142,7 +155,6 @@ public class ExtractDataFromFile implements IExtractDataFromFile {
         this.storageLogsRepository.save(entity);
 
     }
-
 
     // getter e setter
     public String getTimeStamp() {

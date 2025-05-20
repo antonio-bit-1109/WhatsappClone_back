@@ -1,6 +1,6 @@
 package com.example.demo.scheduled;
 
-import com.example.demo.utility.extracting.ExtractDataFromFile;
+import com.example.demo.utility.extracting.ExtractData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * It reads a log file, extracts log data, stores the extracted data in a database,
  * and deletes the log file at a scheduled interval.
  * <p>
- * The class uses the {@link ExtractDataFromFile} component to extract individual log details
+ * The class uses the {@link ExtractData} component to extract individual log details
  * such as timestamp, log type, process ID, thread name, and message from each log line.
  * <p>
  * Features:
@@ -29,11 +29,11 @@ import java.time.LocalDateTime;
 @Component
 public class ScheduledTasks {
 
-    private final ExtractDataFromFile extractDataFromFile;
+    private final ExtractData extractDataFromFile;
     private static final Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
 
 
-    public ScheduledTasks(ExtractDataFromFile extractDataFromFile) {
+    public ScheduledTasks(ExtractData extractDataFromFile) {
         this.extractDataFromFile = extractDataFromFile;
     }
 

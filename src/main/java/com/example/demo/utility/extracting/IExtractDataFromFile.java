@@ -12,4 +12,6 @@ public interface IExtractDataFromFile {
     void extractThreadName(String line);
 
     void BuildRecordForDb();
+
+
 }

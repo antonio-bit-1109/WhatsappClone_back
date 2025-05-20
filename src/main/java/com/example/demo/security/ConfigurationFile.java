@@ -51,7 +51,13 @@ public class ConfigurationFile {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         //  .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/login", "/auth/register", "/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers(
+                                "/auth/login",
+                                "/auth/register",
+                                "/oauth2/**",
+                                "/login/oauth2/**",
+                                "/sendMessage/toMe"
+                        ).permitAll()
                         .requestMatchers("/auth/get/all").hasRole("ADMIN")
                         .requestMatchers("/auth/edit").authenticated()
                         .anyRequest().authenticated()
