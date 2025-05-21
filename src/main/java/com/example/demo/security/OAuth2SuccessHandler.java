@@ -50,7 +50,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         try {
             App_User user = oauth2Service.processOAuth2User(oauth2User);
-            String token = generateToken.generateToken(user);
+            String token = generateToken.generateToken(user, user.getAnagrafica());
             logger.atInfo().log(String.format("Token generato %s", token));
 
             String redirectUrl = "http://localhost:4200/success?token=" + token;

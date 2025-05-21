@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 
+import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,11 +25,12 @@ public class GenerateToken {
         return key;
     }
 
-    public String generateToken(App_User user) {
+    public String generateToken(App_User user, Anagrafica anagrafica) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getRole()); // Aggiungi eventuali ruoli o informazioni extra
         claims.put("id", user.getId());
         claims.put("image", user.getProfileImage());
+        claims.put("full_name", String.format(anagrafica.getNome() + " " + anagrafica.getCognome()));
 
         return Jwts.builder()
                 .setClaims(claims)

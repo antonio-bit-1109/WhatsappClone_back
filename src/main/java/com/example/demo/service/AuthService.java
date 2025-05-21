@@ -161,7 +161,7 @@ public class AuthService implements IAuthService,
 
             CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
             App_User user = userDetails.getAppUser();
-            String token = this.generateToken.generateToken(user);
+            String token = this.generateToken.generateToken(user, user.getAnagrafica());
             logger.atInfo().log(
                     String.format("login utente effettuata con successo  id: %s, username: %s -- /auth/login.",
                             user.getId(),
