@@ -1,8 +1,9 @@
 package com.example.demo.dto.requests.appUser;
 
+import com.example.demo.interfaces.DtoInterface;
 import jakarta.validation.constraints.NotNull;
 
-public class LoginDTO {
+public class LoginDTO implements DtoInterface {
 
     @NotNull(message = "lo username non può essere null.")
     private String username;

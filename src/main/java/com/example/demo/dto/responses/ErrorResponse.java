@@ -1,11 +1,12 @@
 package com.example.demo.dto.responses;
 
+import com.example.demo.interfaces.DtoInterface;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
-public class ErrorResponse {
+public class ErrorResponse implements DtoInterface {
 
     @Schema(description = "the path invoked by client that generate the error")
     private String apiPath;

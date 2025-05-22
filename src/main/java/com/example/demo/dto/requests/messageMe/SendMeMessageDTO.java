@@ -1,8 +1,9 @@
 package com.example.demo.dto.requests.messageMe;
 
+import com.example.demo.interfaces.DtoInterface;
 import jakarta.validation.constraints.NotBlank;
 
-public class SendMeMessageDTO {
+public class SendMeMessageDTO implements DtoInterface {
 
     @NotBlank(message = "il sender non può essere null or empty")
     private String sender;

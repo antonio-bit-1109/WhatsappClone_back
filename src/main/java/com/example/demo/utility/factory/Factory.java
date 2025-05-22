@@ -73,8 +73,7 @@ public class Factory implements EntityFactory {
     public StoreMessages createEntityStoreMessage(SendMeMessageDTO data) {
         return new StoreMessages(data.getSender(), data.getMessage());
     }
-
-
+    
     public App_User addAnagraficaToUser(
             Anagrafica anagrafica,
             App_User user

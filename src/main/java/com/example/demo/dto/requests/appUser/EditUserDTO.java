@@ -1,9 +1,10 @@
 package com.example.demo.dto.requests.appUser;
 
+import com.example.demo.interfaces.DtoInterface;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class EditUserDTO {
+public class EditUserDTO implements DtoInterface {
 
     @NotNull
     private Long idUser;
