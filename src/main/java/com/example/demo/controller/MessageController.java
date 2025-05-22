@@ -19,8 +19,7 @@ public class MessageController {
     public MessageController(ISendMessage sendMessage) {
         this.sendMessage = sendMessage;
     }
-
-
+    
     @PostMapping("/toMe")
     public ResponseEntity<StringResponse> sendMeAMessage(
             @Valid @RequestBody SendMeMessageDTO messageData
