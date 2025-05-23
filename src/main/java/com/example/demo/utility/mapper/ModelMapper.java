@@ -39,6 +39,7 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
         dto.setNome(anagrafica.getNome());
         dto.setUsername(user.getUsername());
         dto.setTelefono(anagrafica.getTelefono());
+        dto.setEmail(user.getEmail());
         return dto;
     }
 

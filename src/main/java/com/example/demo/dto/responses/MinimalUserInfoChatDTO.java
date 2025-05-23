@@ -8,7 +8,16 @@ public class MinimalUserInfoChatDTO implements DtoInterface {
     private String cognome;
     private String telefono;
     private String profileImage;
+    private String email;
 
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 
     public String getUsername() {
         return username;
