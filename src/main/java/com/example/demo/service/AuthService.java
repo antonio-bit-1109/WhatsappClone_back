@@ -94,7 +94,6 @@ public class AuthService implements IAuthService,
             throw new BadTelephoneFormat("formato numero telefono non valido.");
         }
 
-
         // creazione entity user tramite factory
         App_User user = this.factory.createEntityUser(
                 new CreateUserDTO(

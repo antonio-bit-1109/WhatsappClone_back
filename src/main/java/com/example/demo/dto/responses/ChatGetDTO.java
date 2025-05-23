@@ -1,6 +1,5 @@
 package com.example.demo.dto.responses;
 
-import com.example.demo.entity.Messaggio;
 import com.example.demo.interfaces.DtoInterface;
 
 import java.time.LocalDateTime;
@@ -28,7 +27,7 @@ public class ChatGetDTO implements DtoInterface {
     public List<MinimalUserInfoChatDTO> getListaPartecipanti() {
         return listaPartecipanti;
     }
-    
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

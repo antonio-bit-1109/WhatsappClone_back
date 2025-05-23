@@ -6,7 +6,6 @@ import com.example.demo.dto.requests.chatMessage.CreateChatDTO;
 import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
 import com.example.demo.entity.*;
 import com.example.demo.enums.ProfileImage;
-import com.example.demo.repository.App_UserRepository;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.ChatRestService;
 import org.springframework.context.annotation.Lazy;
