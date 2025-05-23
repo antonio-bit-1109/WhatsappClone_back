@@ -3,24 +3,11 @@ package com.example.demo.utility.extracting;
 import com.example.demo.entity.StorageLogs;
 import com.example.demo.enums.LogLevel;
 import com.example.demo.repository.StorageLogsRepository;
-import com.example.demo.utility.factory.Factory;
+import com.example.demo.utility.factory.entityfactory.Factory;
 import org.springframework.stereotype.Component;
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.DirectoryIteratorException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 
 @Component

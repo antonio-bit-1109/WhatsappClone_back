@@ -60,6 +60,7 @@ public class ConfigurationFile {
                         ).permitAll()
                         .requestMatchers("/auth/get/all").hasRole("ADMIN")
                         .requestMatchers("/auth/edit").authenticated()
+                        .requestMatchers("/chat/rest/*").authenticated()
                         .anyRequest().authenticated()
                 )
 

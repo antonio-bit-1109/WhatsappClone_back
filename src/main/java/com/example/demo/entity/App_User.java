@@ -4,6 +4,8 @@ import com.example.demo.enums.AuthProvider;
 import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
 public class App_User implements BaseEntity {
@@ -43,10 +45,32 @@ public class App_User implements BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private Anagrafica anagrafica;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Messaggio> listaMessaggi;
+
+    @ManyToMany
+    private List<Chat> listaChats;
+
     @Enumerated(EnumType.STRING)
     private AuthProvider provider = AuthProvider.LOCAL;
 
     private String providerId;
+
+    public List<Chat> getListaChats() {
+        return listaChats;
+    }
+
+    public void setListaChats(List<Chat> listaChats) {
+        this.listaChats = listaChats;
+    }
+
+    public List<Messaggio> getListaMessaggi() {
+        return listaMessaggi;
+    }
+
+    public void setListaMessaggi(List<Messaggio> listaMessaggi) {
+        this.listaMessaggi = listaMessaggi;
+    }
 
     public String getProfileImage() {
         return profileImage;
@@ -151,4 +175,5 @@ public class App_User implements BaseEntity {
     public Long getId() {
         return id;
     }
+
 }

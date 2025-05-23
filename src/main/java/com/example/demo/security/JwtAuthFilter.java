@@ -47,7 +47,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            StringResponse s = new StringResponse("Token JWT assente o richiesta malformata.");
+            new ObjectMapper().writeValue(response.getWriter(), s);
             return;
         }
 
@@ -62,7 +65,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             String username = claims.getSubject();
             String role = (String) claims.get("role");
-            String id = (String) claims.get("id");
+            String id = claims.get("id").toString();
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 List<SimpleGrantedAuthority> authorities =

@@ -12,7 +12,7 @@ import com.example.demo.repository.App_UserRepository;
 import com.example.demo.security.GenerateToken;
 import com.example.demo.utility.adapter.CustomUserDetail;
 import com.example.demo.utility.exception.*;
-import com.example.demo.utility.factory.Factory;
+import com.example.demo.utility.factory.entityfactory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
 
 import jakarta.transaction.Transactional;
@@ -35,7 +35,13 @@ import org.slf4j.LoggerFactory;
 // dal controller al service
 @Service
 public class AuthService implements IAuthService,
-        BasicCrud<UserRegistrationDTO, Long, GetUserDTO, StringResponse, EditUserDTO> {
+        BasicCrud<UserRegistrationDTO,
+                Long,
+                GetUserDTO,
+                StringResponse,
+                EditUserDTO,
+                Object
+                > {
 
     private final App_UserRepository appUserRepository;
     private final AnagraficaRepository anagraficaRepository;
@@ -218,7 +224,7 @@ public class AuthService implements IAuthService,
     }
 
     @Override
-    public List<GetUserDTO> getAll() {
+    public List<GetUserDTO> getAll(Optional<Object> optional) {
 
         return this.appUserRepository.findAll()
                 .stream()
@@ -320,5 +326,11 @@ public class AuthService implements IAuthService,
         return adminUser.isPresent();
 
     }
+
+    @Override
+    public App_User save(App_User userEntity) {
+        return this.appUserRepository.save(userEntity);
+    }
+
 
 }

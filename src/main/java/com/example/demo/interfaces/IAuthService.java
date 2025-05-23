@@ -24,4 +24,6 @@ public interface IAuthService {
     boolean checkIfIsRegisteringAdmin(UserRegistrationDTO data);
 
     boolean checkIfThisAdminAlreadyCreated(String username);
+
+    App_User save(App_User userEntity);
 }

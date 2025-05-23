@@ -1,11 +1,12 @@
 package com.example.demo.entity;
 
+import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;
 
 @Entity
-public class StorageLogs {
+public class StorageLogs implements BaseEntity {
 
 
     public StorageLogs(String threadName, String message, Integer processId, String logType, ZonedDateTime timestamp) {

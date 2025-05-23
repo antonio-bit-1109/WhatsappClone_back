@@ -1,10 +1,11 @@
 package com.example.demo.entity;
 
+import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
 
 
 @Entity
-public class StoreMessages {
+public class StoreMessages implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

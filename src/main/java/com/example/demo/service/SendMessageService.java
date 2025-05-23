@@ -1,14 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
-import com.example.demo.entity.StoreMessages;
 import com.example.demo.interfaces.ISendMessage;
 import com.example.demo.repository.StoreMessageRepository;
 import com.example.demo.utility.exception.BadWordFounded;
 import com.example.demo.utility.exception.InvalidEmailFormat;
 import com.example.demo.utility.extracting.ExtractBadWords;
-import com.example.demo.utility.extracting.ExtractData;
-import com.example.demo.utility.factory.Factory;
+import com.example.demo.utility.factory.entityfactory.Factory;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 // tag usato per descrivere a cosa serve questo controller, che poi sarà riflettuto
 // nella pagina di swagger come descrizione del controller
@@ -74,7 +75,7 @@ public class AuthController {
 
     @GetMapping("/get/all")
     public ResponseEntity<List<GetUserDTO>> getAll() {
-        return ResponseEntity.ok(this.authService.getAll());
+        return ResponseEntity.ok(this.authService.getAll(Optional.empty()));
     }
 
     @PostMapping("/edit")

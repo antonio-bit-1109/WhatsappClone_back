@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sendMessage")
-public class MessageController {
+public class SendMeMessageEmailController {
 
     private final ISendMessage sendMessage;
 
-    public MessageController(ISendMessage sendMessage) {
+    public SendMeMessageEmailController(ISendMessage sendMessage) {
         this.sendMessage = sendMessage;
     }
     

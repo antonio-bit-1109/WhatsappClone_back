@@ -2,9 +2,10 @@ package com.example.demo.interfaces;
 
 
 import java.util.List;
+import java.util.Optional;
 
 // i servizi implementeranno le basic crud per le crud base
-public interface BasicCrud<T, K, R, S, E> {
+public interface BasicCrud<T, K, R, S, E, Y> {
 
     void create(T dataRegistration);
 
@@ -14,5 +15,5 @@ public interface BasicCrud<T, K, R, S, E> {
 
     R get(K dataGet);
 
-    List<R> getAll();
+    List<R> getAll(Optional<Y> data);
 }

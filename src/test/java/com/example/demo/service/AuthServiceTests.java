@@ -7,7 +7,7 @@ import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.repository.AnagraficaRepository;
 import com.example.demo.repository.App_UserRepository;
-import com.example.demo.utility.factory.Factory;
+import com.example.demo.utility.factory.entityfactory.Factory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

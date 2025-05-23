@@ -1,27 +1,38 @@
-package com.example.demo.utility.factory;
+package com.example.demo.utility.factory.entityfactory;
 
 import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;
+import com.example.demo.dto.requests.chatMessage.CreateChatDTO;
 import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
-import com.example.demo.entity.Anagrafica;
-import com.example.demo.entity.App_User;
-import com.example.demo.entity.StorageLogs;
-import com.example.demo.entity.StoreMessages;
+import com.example.demo.entity.*;
 import com.example.demo.enums.ProfileImage;
+import com.example.demo.repository.App_UserRepository;
+import com.example.demo.service.AuthService;
+import com.example.demo.service.ChatRestService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.UUID;
 
 
 @Service
 public class Factory implements EntityFactory {
 
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
+    private final ChatRestService chatRestService;
 
-    public Factory(PasswordEncoder passwordEncoder) {
+    public Factory(PasswordEncoder passwordEncoder,
+                   @Lazy AuthService authService,
+                   @Lazy ChatRestService chatRestService
+    ) {
         this.passwordEncoder = passwordEncoder;
-
+        this.authService = authService;
+        this.chatRestService = chatRestService;
     }
 
     @Override
@@ -73,7 +84,22 @@ public class Factory implements EntityFactory {
     public StoreMessages createEntityStoreMessage(SendMeMessageDTO data) {
         return new StoreMessages(data.getSender(), data.getMessage());
     }
-    
+
+    @Override
+    public Chat createEntityChat(CreateChatDTO data) {
+        Chat c = new Chat();
+        c.setCreatedAt(LocalDateTime.now());
+        c.setIdentity(UUID.randomUUID());
+        c.setListaMessaggi(new ArrayList<>());
+        c.setParticipants(new ArrayList<>());
+        Chat saved = this.chatRestService.save(c);
+        data.getListaPartecipanti().forEach(idUser -> {
+            c.addIntoPartecipantsList(this.authService.getUserById(idUser));
+            addChatToUser(idUser, saved);
+        });
+        return saved;
+    }
+
     public App_User addAnagraficaToUser(
             Anagrafica anagrafica,
             App_User user
@@ -83,4 +109,12 @@ public class Factory implements EntityFactory {
     }
 
 
+    public void addChatToUser(Long idUser, Chat chat) {
+        App_User user = this.authService.getUserById(idUser);
+        if (user.getListaChats() == null) {
+            user.setListaChats(new ArrayList<>());
+        }
+        user.getListaChats().add(chat);
+        this.authService.save(user);
+    }
 }

@@ -7,3 +7,5 @@
 -[x] implementazioni logger per documentare gli avvenimenti
 -[x] implementa un modo per salvare i logs in una tabella a parte e ripulire il file (ogni ora)
  (enum per il tipo di log)??
+
+-[] sistema il crea nuova chat 
