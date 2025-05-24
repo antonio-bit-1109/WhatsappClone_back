@@ -84,7 +84,7 @@ public class ChatRestService
         List<Chat> chats = user.getListaChats();
 
         return chats.stream()
-                .map(this.modelMapper::fromEntityToDto)
+                .map(chat -> this.modelMapper.fromEntityToDto(chat, user))
                 .toList();
 
     }

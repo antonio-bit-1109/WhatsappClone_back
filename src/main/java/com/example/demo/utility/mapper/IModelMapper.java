@@ -12,7 +12,7 @@ public interface IModelMapper<D1, D2> {
 
     D2 fromEntityToDto_generic(App_User user, Anagrafica anagrafica);
 
-    ChatGetDTO fromEntityToDto(Chat chat);
+    ChatGetDTO fromEntityToDto(Chat chat, App_User user);
 
     MessaggioDto fromEntityToDto(Messaggio msg);
 

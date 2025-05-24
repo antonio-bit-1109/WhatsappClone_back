@@ -51,7 +51,7 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
      * @return A ChatGetDTO containing the data mapped from the provided Chat entity.
      */
     @Override
-    public ChatGetDTO fromEntityToDto(Chat chat) {
+    public ChatGetDTO fromEntityToDto(Chat chat, App_User user) {
         ChatGetDTO c = new ChatGetDTO();
         c.setChatIdentity(chat.getIdentity());
         c.setCreatedAt(chat.getCreatedAt());
@@ -61,6 +61,7 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
                 .toList()
         );
         c.setListaPartecipanti(chat.getParticipants().stream()
+                .filter(appUser -> !appUser.equals(user))
                 .map(App_User -> fromEntityToDto_generic(App_User, App_User.getAnagrafica()))
                 .toList());
         return c;
