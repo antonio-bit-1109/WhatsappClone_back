@@ -58,7 +58,7 @@ public class ConfigurationFile {
                                 "/login/oauth2/**",
                                 "/sendMessage/toMe"
                         ).permitAll()
-                        .requestMatchers("/auth/get/all").hasRole("ADMIN")
+                        .requestMatchers("/auth/get/all").authenticated()
                         .requestMatchers("/auth/edit").authenticated()
                         .requestMatchers("/chat/rest/*").authenticated()
                         .anyRequest().authenticated()

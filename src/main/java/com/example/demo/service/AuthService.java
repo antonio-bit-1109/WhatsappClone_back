@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.requests.appUser.*;
+import com.example.demo.dto.responses.ExtraMinimalUserInfo;
 import com.example.demo.dto.responses.GetUserDTO;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.entity.Anagrafica;
@@ -279,6 +280,16 @@ public class AuthService implements IAuthService,
         }
 
         return optUser.get();
+    }
+
+
+    // prendere dal db tutti quegli utenti con cui gia non ho una chat attiva e fare la get
+    // se con un utente X ho gia una chat attiva,
+    // quell utente X non dovrà stare dentro questa get
+    @Override
+    public List<ExtraMinimalUserInfo> getAllUsersInoHaveChatWith(Long idUser) {
+        return this.appUserRepository
+                .getAllUsersICanHaveAChatWith(idUser);
     }
 
     // check if the user is inactive

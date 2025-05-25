@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.requests.appUser.EditUserDTO;
 import com.example.demo.dto.requests.appUser.LoginDTO;
 import com.example.demo.dto.requests.appUser.UserRegistrationDTO;
-import com.example.demo.dto.responses.GetUserDTO;
+import com.example.demo.dto.responses.ExtraMinimalUserInfo;
 import com.example.demo.dto.responses.StringResponse;
 import com.example.demo.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 // tag usato per descrivere a cosa serve questo controller, che poi sarà riflettuto
 // nella pagina di swagger come descrizione del controller
@@ -73,9 +72,13 @@ public class AuthController {
         return ResponseEntity.ok(this.authService.delete(IdUser));
     }
 
-    @GetMapping("/get/all")
-    public ResponseEntity<List<GetUserDTO>> getAll() {
-        return ResponseEntity.ok(this.authService.getAll(Optional.empty()));
+    @GetMapping("/get/all/{idUser}")
+    public ResponseEntity<List<ExtraMinimalUserInfo>> getAll(
+            @NotNull @PathVariable("idUser") Long idUser
+    ) {
+        return ResponseEntity.ok(
+                this.authService.getAllUsersInoHaveChatWith(idUser)
+        );
     }
 
     @PostMapping("/edit")

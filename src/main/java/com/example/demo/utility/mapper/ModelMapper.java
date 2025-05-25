@@ -1,9 +1,6 @@
 package com.example.demo.utility.mapper;
 
-import com.example.demo.dto.responses.ChatGetDTO;
-import com.example.demo.dto.responses.GetUserDTO;
-import com.example.demo.dto.responses.MessaggioDto;
-import com.example.demo.dto.responses.MinimalUserInfoChatDTO;
+import com.example.demo.dto.responses.*;
 import com.example.demo.entity.Anagrafica;
 import com.example.demo.entity.App_User;
 import com.example.demo.entity.Chat;
@@ -12,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChatDTO> {
+public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChatDTO, ExtraMinimalUserInfo> {
 
 
     // ritornare una response che sia le get di un singolo utente
@@ -40,6 +37,16 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
         dto.setUsername(user.getUsername());
         dto.setTelefono(anagrafica.getTelefono());
         dto.setEmail(user.getEmail());
+        return dto;
+    }
+
+    @Override
+    public ExtraMinimalUserInfo fromEntityToMinimal(App_User user, Anagrafica anagrafica) {
+        ExtraMinimalUserInfo dto = new ExtraMinimalUserInfo();
+        dto.setId(user.getId());
+        dto.setName(anagrafica.getNome());
+        dto.setSurname(anagrafica.getCognome());
+        dto.setUsername(user.getUsername());
         return dto;
     }
 
