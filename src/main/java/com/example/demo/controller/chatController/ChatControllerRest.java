@@ -38,6 +38,16 @@ public class ChatControllerRest {
         return ResponseEntity.ok(new StringResponse("nuova chat creata con successo"));
     }
 
+
+    /**
+     * Recupera tutte le chat associate a un utente specifico. Questo endpoint accetta
+     * l'ID dell'utente e restituisce un elenco delle conversazioni a cui partecipa.
+     *
+     * @param userId l'identificativo univoco dell'utente per cui si vogliono recuperare
+     *               le chat; deve essere valido e non nullo.
+     * @return un {@code ResponseEntity} contenente una lista di oggetti {@code ChatGetDTO}
+     * che rappresentano tutte le chat associate all'utente specificato.
+     */
     @GetMapping("/get/all/mine/{userId}")
     public ResponseEntity<List<ChatGetDTO>> getAllMineChats(
             @NotNull @PathVariable("userId") Long userId
