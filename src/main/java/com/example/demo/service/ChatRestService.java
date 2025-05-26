@@ -1,18 +1,23 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.requests.chatMessage.ChatMessageDTO;
 import com.example.demo.dto.requests.chatMessage.CreateChatDTO;
 import com.example.demo.dto.responses.ChatGetDTO;
 import com.example.demo.entity.App_User;
 import com.example.demo.entity.Chat;
+import com.example.demo.entity.Messaggio;
 import com.example.demo.interfaces.BasicCrud;
 import com.example.demo.interfaces.IChatRestService;
 import com.example.demo.repository.ChatRepository;
+import com.example.demo.repository.MessaggioRepository;
+import com.example.demo.utility.exception.NoChatFound;
 import com.example.demo.utility.factory.entityfactory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ChatRestService
@@ -29,15 +34,18 @@ public class ChatRestService
     private final Factory factory;
     private final AuthService authService;
     private final ModelMapper modelMapper;
+    private final MessaggioRepository messaggioRepository;
 
     public ChatRestService(ChatRepository chatRepository,
                            Factory factory,
                            AuthService authService,
-                           ModelMapper modelMapper) {
+                           ModelMapper modelMapper,
+                           MessaggioRepository messaggioRepository) {
         this.chatRepository = chatRepository;
         this.factory = factory;
         this.authService = authService;
         this.modelMapper = modelMapper;
+        this.messaggioRepository = messaggioRepository;
     }
 
 
@@ -100,5 +108,35 @@ public class ChatRestService
     @Override
     public Chat save(Chat chat) {
         return this.chatRepository.save(chat);
+    }
+
+
+    @Override
+    public void addMessageToChat(ChatMessageDTO message) {
+
+        App_User user = this.authService.getUserById(message.getUserOwnerId());
+        Chat chat = this.getChatFromIdentity(UUID.fromString(message.getChatIdentity()));
+
+        Messaggio mess = this.factory
+                .createEntityMessaggio(
+                        message,
+                        user,
+                        chat
+                );
+        this.messaggioRepository.save(mess);
+
+        this.factory.addMessaggioToUser(user, mess);
+        this.factory.addMessaggioToChat(chat, mess);
+    }
+
+    @Override
+    public Chat getChatFromIdentity(UUID identity) {
+        Optional<Chat> opt_chat = this.chatRepository.getChatByIdentity(identity);
+
+        if (opt_chat.isEmpty()) {
+            throw new NoChatFound("nessuna chat trovata per l'identity fornito.");
+        }
+
+        return opt_chat.get();
     }
 }

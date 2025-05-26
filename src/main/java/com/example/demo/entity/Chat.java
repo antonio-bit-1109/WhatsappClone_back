@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(indexes = {
+        @Index(columnList = "identity", name = "identity_chat"),
+})
 public class Chat implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // fornito internamente
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private UUID identity; // fornito internamente
 
     @Column(nullable = false)
@@ -23,7 +26,7 @@ public class Chat implements BaseEntity {
 
     @ManyToMany
     private List<App_User> participants; // fornito dal front end id utenti (Long)
-    
+
     @OneToMany(mappedBy = "chat")
     private List<Messaggio> listaMessaggi; // alla creazione della chat nessun messaggio.
 

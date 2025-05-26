@@ -76,7 +76,7 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
 
     @Override
     public MessaggioDto fromEntityToDto(Messaggio msg) {
-        return new MessaggioDto(msg.getSendAtTime(), msg.getMessageStatus(), msg.getContent());
+        return new MessaggioDto(msg.getSendAtTime(), msg.getMessageStatus(), msg.getContent(), msg.getOwner().getUsername());
     }
 
 

@@ -25,9 +25,9 @@ public class ChatWebSocketService implements IChatWebSocketService {
      *                 including the ID of the chat to identify
      * @return the UUID identity of the chat associated with the given chat ID
      */
-    @Override
-    public UUID retriveUuidChat(ChatMessageDTO dataChat) {
-        Chat chat = this.chatRepository.getChatById(dataChat.getChatId());
-        return chat.getIdentity();
-    }
+//    @Override
+//    public UUID retriveUuidChat(ChatMessageDTO dataChat) {
+//        Chat chat = this.chatRepository.getChatById(dataChat.get());
+//        return chat.getIdentity();
+//    }
 }

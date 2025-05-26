@@ -2,10 +2,13 @@ package com.example.demo.utility.factory.entityfactory;
 
 import com.example.demo.dto.requests.appUser.CreateAnagraficaDTO;
 import com.example.demo.dto.requests.appUser.CreateUserDTO;
+import com.example.demo.dto.requests.chatMessage.ChatMessageDTO;
 import com.example.demo.dto.requests.chatMessage.CreateChatDTO;
 import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
 import com.example.demo.entity.*;
+import com.example.demo.enums.MessageStatus;
 import com.example.demo.enums.ProfileImage;
+import com.example.demo.repository.MessaggioRepository;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.ChatRestService;
 import org.springframework.context.annotation.Lazy;
@@ -25,13 +28,16 @@ public class Factory implements EntityFactory {
     private final AuthService authService;
     private final ChatRestService chatRestService;
 
+
     public Factory(PasswordEncoder passwordEncoder,
                    @Lazy AuthService authService,
-                   @Lazy ChatRestService chatRestService
+                   @Lazy ChatRestService chatRestService,
+                   @Lazy MessaggioRepository messaggioRepository
     ) {
         this.passwordEncoder = passwordEncoder;
         this.authService = authService;
         this.chatRestService = chatRestService;
+
     }
 
     @Override
@@ -99,6 +105,7 @@ public class Factory implements EntityFactory {
         return saved;
     }
 
+    @Override
     public App_User addAnagraficaToUser(
             Anagrafica anagrafica,
             App_User user
@@ -107,7 +114,7 @@ public class Factory implements EntityFactory {
         return user;
     }
 
-
+    @Override
     public void addChatToUser(Long idUser, Chat chat) {
         App_User user = this.authService.getUserById(idUser);
         if (user.getListaChats() == null) {
@@ -115,5 +122,38 @@ public class Factory implements EntityFactory {
         }
         user.getListaChats().add(chat);
         this.authService.save(user);
+    }
+
+    @Override
+    public Messaggio createEntityMessaggio(ChatMessageDTO dto,
+                                           App_User user,
+                                           Chat chat
+    ) {
+        Messaggio m = new Messaggio();
+        m.setContent(dto.getText());
+        m.setOwner(user);
+        m.setChat(chat);
+        m.setSendAtTime(LocalDateTime.now());
+        m.setMessageStatus(MessageStatus.SENT);
+        return m;
+    }
+
+
+    @Override
+    public void addMessaggioToUser(App_User user, Messaggio messaggio) {
+        if (user.getListaMessaggi() == null) {
+            user.setListaMessaggi(new ArrayList<>());
+        }
+        user.getListaMessaggi().add(messaggio);
+        this.authService.save(user);
+    }
+
+    @Override
+    public void addMessaggioToChat(Chat chat, Messaggio messaggio) {
+        if (chat.getListaMessaggi() == null) {
+            chat.setListaMessaggi(new ArrayList<>());
+        }
+        chat.getListaMessaggi().add(messaggio);
+        this.chatRestService.save(chat);
     }
 }

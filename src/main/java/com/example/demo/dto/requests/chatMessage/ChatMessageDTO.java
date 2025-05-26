@@ -8,26 +8,29 @@ import jakarta.validation.constraints.NotNull;
 public class ChatMessageDTO implements DtoInterface {
 
     @NotNull(message = "userOwnerId must be not null")
-    private Long UserOwnerId;
+    private Long userOwnerId;
+
     @NotEmpty(message = "text not null or empty")
     private String text;
-    @NotNull(message = "chatIdentity must not be null")
-    private Long chatId;
 
-    public Long getChatId() {
-        return chatId;
+    @NotEmpty(message = "chatIdentity must not be null")
+    private String chatIdentity;
+
+    public String getChatIdentity() {
+        return chatIdentity;
     }
 
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
+    public void setChatIdentity(String chatIdentity) {
+        this.chatIdentity = chatIdentity;
     }
+
 
     public Long getUserOwnerId() {
-        return UserOwnerId;
+        return userOwnerId;
     }
 
     public void setUserOwnerId(Long userOwnerId) {
-        UserOwnerId = userOwnerId;
+        this.userOwnerId = userOwnerId;
     }
 
     public String getText() {

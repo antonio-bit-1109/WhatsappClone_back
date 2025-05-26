@@ -9,12 +9,22 @@ public class MessaggioDto implements DtoInterface {
     private LocalDateTime sendAtTime;
     private MessageStatus messageStatus;
     private String content;
+    private String userSender;
 
 
-    public MessaggioDto(LocalDateTime sendAtTime, MessageStatus messageStatus, String content) {
+    public MessaggioDto(LocalDateTime sendAtTime, MessageStatus messageStatus, String content, String userSender) {
         this.sendAtTime = sendAtTime;
         this.messageStatus = messageStatus;
         this.content = content;
+        this.userSender = userSender;
+    }
+
+    public void setUserSender(String userSender) {
+        this.userSender = userSender;
+    }
+
+    public String getUserSender() {
+        return userSender;
     }
 
     public LocalDateTime getSendAtTime() {

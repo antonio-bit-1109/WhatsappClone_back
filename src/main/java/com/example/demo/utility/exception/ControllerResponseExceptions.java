@@ -218,4 +218,18 @@ public class ControllerResponseExceptions extends ResponseEntityExceptionHandler
         ),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NoChatFound.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEmailFormat(
+            NoChatFound ex,
+            WebRequest webRequest
+    ) {
+        return new ResponseEntity<>(new ErrorResponse(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now()
+        ),
+                HttpStatus.BAD_REQUEST);
+    }
 }

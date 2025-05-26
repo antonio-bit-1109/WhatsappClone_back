@@ -1,5 +1,6 @@
 package com.example.demo.controller.chatController;
 
+import com.example.demo.dto.requests.chatMessage.ChatMessageDTO;
 import com.example.demo.dto.requests.chatMessage.CreateChatDTO;
 import com.example.demo.dto.responses.ChatGetDTO;
 import com.example.demo.dto.responses.StringResponse;
@@ -55,5 +56,11 @@ public class ChatControllerRest {
         return ResponseEntity.ok(
                 this.chatRestService.getAll(Optional.of(userId))
         );
+    }
+
+    @PostMapping("/post/message")
+    public ResponseEntity<?> addMessage(@Valid @RequestBody ChatMessageDTO chatMessage) {
+        this.chatRestService.addMessageToChat(chatMessage);
+        return ResponseEntity.ok(new StringResponse("messaggio inviato"));
     }
 }

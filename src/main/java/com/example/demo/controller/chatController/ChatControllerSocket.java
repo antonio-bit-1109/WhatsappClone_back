@@ -31,9 +31,9 @@ public class ChatControllerSocket {
         // prendo il chatID dal payload e lo uso per trovare
         // il chat identity (UUID) per identificare/creare il canale a cui inviare il messaggio
         // sul socket
-        UUID identity = this.chatWebSocketService.retriveUuidChat(message);
+//        UUID identity = this.chatWebSocketService.retriveUuidChat(message);
 
         // messaggio inviato tramite webSocket al canale che sarà "/send-private
-        this.messagingTemplate.convertAndSend(BrokerDestinations.PRIVATE + identity.toString());
+        this.messagingTemplate.convertAndSend(BrokerDestinations.PRIVATE + message.getChatIdentity());
     }
 }

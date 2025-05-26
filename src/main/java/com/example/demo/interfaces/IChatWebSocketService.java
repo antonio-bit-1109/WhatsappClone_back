@@ -8,5 +8,5 @@ import java.util.UUID;
 @Service
 public interface IChatWebSocketService {
 
-    UUID retriveUuidChat(ChatMessageDTO dataChat);
+//    UUID retriveUuidChat(ChatMessageDTO dataChat);
 }
