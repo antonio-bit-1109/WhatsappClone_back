@@ -338,6 +338,17 @@ public class AuthService implements IAuthService,
     }
 
     @Override
+    public boolean userExistById(Long idUser) {
+        Optional<App_User> opt_user = this.appUserRepository.getApp_UserById(idUser);
+
+        if (opt_user.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public App_User save(App_User userEntity) {
         return this.appUserRepository.save(userEntity);
     }
