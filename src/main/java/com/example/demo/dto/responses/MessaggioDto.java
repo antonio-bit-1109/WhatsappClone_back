@@ -10,13 +10,23 @@ public class MessaggioDto implements DtoInterface {
     private MessageStatus messageStatus;
     private String content;
     private String userSender;
+    private String email;
 
 
-    public MessaggioDto(LocalDateTime sendAtTime, MessageStatus messageStatus, String content, String userSender) {
+    public MessaggioDto(LocalDateTime sendAtTime, MessageStatus messageStatus, String content, String userSender, String email) {
         this.sendAtTime = sendAtTime;
         this.messageStatus = messageStatus;
         this.content = content;
         this.userSender = userSender;
+        this.email = email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setUserSender(String userSender) {

@@ -64,7 +64,7 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
         c.setCreatedAt(chat.getCreatedAt());
         c.setMessaggi(chat.getListaMessaggi()
                 .stream()
-                .map(this::fromEntityToDto)
+                .map(messaggio -> this.fromEntityToDto(messaggio))
                 .toList()
         );
         c.setListaPartecipanti(chat.getParticipants().stream()
@@ -76,7 +76,14 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
 
     @Override
     public MessaggioDto fromEntityToDto(Messaggio msg) {
-        return new MessaggioDto(msg.getSendAtTime(), msg.getMessageStatus(), msg.getContent(), msg.getOwner().getUsername());
+
+        return new MessaggioDto(
+                msg.getSendAtTime(),
+                msg.getMessageStatus(),
+                msg.getContent(),
+                msg.getOwner().getUsername(),
+                msg.getOwner().getEmail()
+        );
     }
 
 
