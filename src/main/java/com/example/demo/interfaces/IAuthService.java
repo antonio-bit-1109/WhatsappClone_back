@@ -30,5 +30,7 @@ public interface IAuthService {
 
     boolean checkIfThisAdminAlreadyCreated(String username);
 
+    boolean userExistById(Long idUser);
+
     App_User save(App_User userEntity);
 }

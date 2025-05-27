@@ -11,14 +11,20 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketSetup implements WebSocketMessageBrokerConfigurer {
 
+    private final HandShakeInterceptor handShakeInterceptor;
+
+    public WebSocketSetup(HandShakeInterceptor handShakeInterceptor) {
+        this.handShakeInterceptor = handShakeInterceptor;
+    }
 
     // configurazione websocket principale dell applicazione
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:4200")
-                .withSockJS();
-
+                .setAllowedOriginPatterns("http://localhost:4200")  // Usa pattern invece di origins
+                .addInterceptors(this.handShakeInterceptor) // interceptor per intercettare le handShake request e validare l handshake solo se con token
+                .withSockJS()
+        ;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.dto.responses.StringResponse;
+import com.example.demo.interfaces.IJWTAuthFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -20,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter implements IJWTAuthFilter {
 
     private final GenerateToken generateToken;
 
@@ -34,25 +35,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         return path.startsWith("/auth/login") ||
                 path.startsWith("/auth/register") ||
                 path.startsWith("/oauth2") ||      // Abilita endpoint OAuth2
-                path.startsWith("/.well-known");   // Necessario per OpenID Configuration
+                path.startsWith("/.well-known") || // Necessario per OpenID Configuration
+                path.startsWith("/ws") || path.startsWith("/ws/")
+                ;
     }
 
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal
+            (
+                    HttpServletRequest request,
+                    HttpServletResponse response,
+                    FilterChain filterChain
+            )
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            StringResponse s = new StringResponse("Token JWT assente o richiesta malformata.");
-            new ObjectMapper().writeValue(response.getWriter(), s);
-            return;
-        }
+        this.checkIfTokenJWTPresent(response, authHeader);
 
         String jwt = authHeader.substring(7); // rimuove "Bearer "
 
@@ -79,13 +78,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         } catch (JwtException e) {
             // Token non valido
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            StringResponse errorResponse = new StringResponse("Token JWT non valido: " + e.getMessage());
-            new ObjectMapper().writeValue(response.getWriter(), errorResponse);
+            this.Send_unauthorized(response, e);
             return;
         }
 
         filterChain.doFilter(request, response);
+    }
+
+
+    //    Questo metodo verifica la presenza e la validità formale
+    //    del token JWT nell'header di autorizzazione:
+    @Override
+    public void checkIfTokenJWTPresent(
+            HttpServletResponse response,
+            String authHeader
+    )
+            throws IOException {
+
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            StringResponse s = new StringResponse("Token JWT assente o richiesta malformata.");
+            new ObjectMapper().writeValue(response.getWriter(), s);
+            return;
+        }
+
+    }
+
+    @Override
+    public void Send_unauthorized(HttpServletResponse response, JwtException e)
+            throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        StringResponse errorResponse = new StringResponse("Token JWT non valido: " + e.getMessage());
+        new ObjectMapper().writeValue(response.getWriter(), errorResponse);
     }
 }
