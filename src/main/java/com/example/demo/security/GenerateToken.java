@@ -31,6 +31,7 @@ public class GenerateToken {
         claims.put("id", user.getId());
         claims.put("image", user.getProfileImage());
         claims.put("full_name", String.format(anagrafica.getNome() + " " + anagrafica.getCognome()));
+        claims.put("email", user.getEmail());
 
         return Jwts.builder()
                 .setClaims(claims)
