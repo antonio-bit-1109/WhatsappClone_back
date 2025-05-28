@@ -76,10 +76,8 @@ public class HandShakeInterceptor implements HandshakeInterceptor {
                     );
                     return true;
                 }
-
-
+                
                 return false;
-
 
             } catch (JwtException ex) {
                 return false;

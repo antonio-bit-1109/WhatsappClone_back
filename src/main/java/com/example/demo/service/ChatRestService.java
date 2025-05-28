@@ -35,17 +35,21 @@ public class ChatRestService
     private final AuthService authService;
     private final ModelMapper modelMapper;
     private final MessaggioRepository messaggioRepository;
+    private final ChatWebSocketService chatWebSocketService;
 
     public ChatRestService(ChatRepository chatRepository,
                            Factory factory,
                            AuthService authService,
                            ModelMapper modelMapper,
-                           MessaggioRepository messaggioRepository) {
+                           MessaggioRepository messaggioRepository,
+                           ChatWebSocketService chatWebSocketService
+    ) {
         this.chatRepository = chatRepository;
         this.factory = factory;
         this.authService = authService;
         this.modelMapper = modelMapper;
         this.messaggioRepository = messaggioRepository;
+        this.chatWebSocketService = chatWebSocketService;
     }
 
 
@@ -127,6 +131,9 @@ public class ChatRestService
 
         this.factory.addMessaggioToUser(user, mess);
         this.factory.addMessaggioToChat(chat, mess);
+
+        //invio il messaggio arrivato al server anche al socket
+        this.chatWebSocketService.sendToPrivateChat(message);
     }
 
     @Override
