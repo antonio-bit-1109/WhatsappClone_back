@@ -1,7 +1,6 @@
 package com.example.demo.websocketSetup;
 
 import com.example.demo.security.GenerateToken;
-import com.example.demo.security.JwtAuthFilter;
 import com.example.demo.service.AuthService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -18,12 +17,9 @@ import java.util.Map;
 public class HandShakeInterceptor implements HandshakeInterceptor {
 
     private final AuthService authService;
-    private final JwtAuthFilter jwtAuthFilter;
 
-    public HandShakeInterceptor(AuthService authService,
-                                JwtAuthFilter jwtAuthFilter) {
+    public HandShakeInterceptor(AuthService authService) {
         this.authService = authService;
-        this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @Override
@@ -61,7 +57,6 @@ public class HandShakeInterceptor implements HandshakeInterceptor {
                     attributes.put("email", email);
                     return true;
                 }
-                ;
 
 
                 return false;
