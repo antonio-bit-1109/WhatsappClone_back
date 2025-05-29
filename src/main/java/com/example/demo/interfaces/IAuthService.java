@@ -32,5 +32,7 @@ public interface IAuthService {
 
     boolean userExistById(Long idUser);
 
+    App_User getUserByEmail(String email);
+
     App_User save(App_User userEntity);
 }

@@ -21,6 +21,9 @@ public class MessaggioDto implements DtoInterface {
         this.email = email;
     }
 
+    public MessaggioDto() {
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

@@ -23,7 +23,7 @@ import java.util.UUID;
 public class ChatRestService
         implements BasicCrud<
         CreateChatDTO,
-        Object,
+        String,
         ChatGetDTO,
         Object,
         Object,
@@ -71,13 +71,29 @@ public class ChatRestService
     }
 
     @Override
-    public Object delete(Object data) {
+    public Object delete(String chatIdentity) {
         return null;
     }
 
     @Override
-    public ChatGetDTO get(Object dataGet) {
-        return null;
+    public ChatGetDTO get(String identityAndEmailAndUserId) {
+        // Divido la stringa usando le virgole
+        String[] parts = identityAndEmailAndUserId.split(",");
+
+        // Verifico che ci siano tutte e tre le parti
+        if (parts.length < 3) {
+            throw new IllegalArgumentException("La stringa deve contenere chatIdentity, userEmail e userId separati da virgole");
+        }
+
+        String chatIdentity = parts[0];
+        String userEmail = parts[1];
+        String userId = parts[2];
+
+        // Recupero la chat usando l'identity
+        Chat chat = this.getChatFromIdentity(UUID.fromString(chatIdentity));
+
+        // Restituisco il DTO mappato
+        return this.modelMapper.fromEntityToDto(chat, this.authService.getUserById(Long.parseLong(userId)));
     }
 
     // ritornare una lista di tutte le mie chat (userId che le sta richiedendo)
@@ -133,7 +149,7 @@ public class ChatRestService
         this.factory.addMessaggioToChat(chat, mess);
 
         //invio il messaggio arrivato al server anche al socket
-        this.chatWebSocketService.sendToPrivateChat(message, user);
+        this.chatWebSocketService.sendToPrivateChat(message, user, mess.getSendAtTime());
     }
 
     @Override

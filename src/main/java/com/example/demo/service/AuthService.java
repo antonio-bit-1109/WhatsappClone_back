@@ -349,6 +349,18 @@ public class AuthService implements IAuthService,
     }
 
     @Override
+    public App_User getUserByEmail(String email) {
+        Optional<App_User> user_opt = this.appUserRepository.getUserByEmail(email);
+
+        if (user_opt.isEmpty()) {
+            throw new UserNotFound("utente non trovato");
+        }
+
+        return user_opt.get();
+    }
+
+
+    @Override
     public App_User save(App_User userEntity) {
         return this.appUserRepository.save(userEntity);
     }

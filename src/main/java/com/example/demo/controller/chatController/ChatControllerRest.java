@@ -63,4 +63,15 @@ public class ChatControllerRest {
         this.chatRestService.addMessageToChat(chatMessage);
         return ResponseEntity.ok(new StringResponse("messaggio inviato"));
     }
+
+    @GetMapping("/get/chat")
+    public ResponseEntity<ChatGetDTO> getChat(
+            @NotNull @RequestParam("identity") String chatIdentity,
+            @NotNull @RequestParam("userEmail") String userEmail,
+            @NotNull @RequestParam("userId") String userId
+    ) {
+        // Ora puoi utilizzare tutti e tre i parametri
+        String identityAndEmailAndUserId = String.format("%s,%s,%s", chatIdentity, userEmail, userId);
+        return ResponseEntity.ok(this.chatRestService.get(identityAndEmailAndUserId));
+    }
 }
