@@ -11,6 +11,7 @@ import com.example.demo.interfaces.IChatRestService;
 import com.example.demo.repository.ChatRepository;
 import com.example.demo.repository.MessaggioRepository;
 import com.example.demo.utility.exception.NoChatFound;
+import com.example.demo.utility.exception.UserNotFound;
 import com.example.demo.utility.factory.entityfactory.Factory;
 import com.example.demo.utility.mapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 public class ChatRestService
@@ -81,19 +83,44 @@ public class ChatRestService
         String[] parts = identityAndEmailAndUserId.split(",");
 
         // Verifico che ci siano tutte e tre le parti
-        if (parts.length < 3) {
-            throw new IllegalArgumentException("La stringa deve contenere chatIdentity, userEmail e userId separati da virgole");
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("La stringa deve contenere chatIdentity: Obbligatorio., userEmail o userId separati da virgole");
         }
 
-        String chatIdentity = parts[0];
-        String userEmail = parts[1];
-        String userId = parts[2];
+        String chatIdentity = null;
+        String email = null;
+        String userId = null;
 
-        // Recupero la chat usando l'identity
+
+        for (String value : parts) {
+
+            if (this.checkIfIdentity(value).isPresent()) {
+                chatIdentity = value;
+            }
+            if (this.checkIfpartIsEmail(value).isPresent()) {
+                email = value;
+            }
+            if (this.checkIfPartIdUserId(value).isPresent()) {
+                userId = value;
+            }
+
+
+        }
+
+        assert chatIdentity != null;
+
         Chat chat = this.getChatFromIdentity(UUID.fromString(chatIdentity));
 
         // Restituisco il DTO mappato
-        return this.modelMapper.fromEntityToDto(chat, this.authService.getUserById(Long.parseLong(userId)));
+        if (email == null && userId != null) {
+            return this.modelMapper.fromEntityToDto(chat, this.authService.getUserById(Long.parseLong(userId)));
+        }
+
+        if (userId == null && email != null) {
+            return this.modelMapper.fromEntityToDto(chat, this.authService.getUserByEmail(email));
+        }
+
+        throw new UserNotFound("utente non trovato. nessuno idUser o email fornita correttamente.");
     }
 
     // ritornare una lista di tutte le mie chat (userId che le sta richiedendo)
@@ -162,4 +189,41 @@ public class ChatRestService
 
         return opt_chat.get();
     }
+
+    @Override
+    public Optional<String> checkIfpartIsEmail(String valueToControl) {
+
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(it|com)$");
+
+        if (pattern.matcher(valueToControl).matches()) {
+            return Optional.of(valueToControl);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> checkIfPartIdUserId(String valueToControl) {
+        Pattern pattern = Pattern.compile("^-?\\d+$");
+
+        if (pattern.matcher(valueToControl).matches()) {
+            return Optional.of(valueToControl);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> checkIfIdentity(String ValueToControl) {
+
+        Pattern pattern = Pattern.compile("^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$");
+
+        if (pattern.matcher(ValueToControl).matches()) {
+            return Optional.of(ValueToControl);
+        }
+
+        return Optional.empty();
+    }
+
+
 }
