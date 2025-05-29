@@ -133,7 +133,7 @@ public class ChatRestService
         this.factory.addMessaggioToChat(chat, mess);
 
         //invio il messaggio arrivato al server anche al socket
-        this.chatWebSocketService.sendToPrivateChat(message);
+        this.chatWebSocketService.sendToPrivateChat(message, user);
     }
 
     @Override

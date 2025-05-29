@@ -16,6 +16,28 @@ public class ChatMessageDTO implements DtoInterface {
     @NotEmpty(message = "chatIdentity must not be null")
     private String chatIdentity;
 
+    private String username;
+
+
+    public ChatMessageDTO(Long userOwnerId, String text, String chatIdentity, String username) {
+        this.userOwnerId = userOwnerId;
+        this.text = text;
+        this.chatIdentity = chatIdentity;
+        this.username = username;
+    }
+
+    public ChatMessageDTO() {
+      
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getChatIdentity() {
         return chatIdentity;
     }
