@@ -36,7 +36,8 @@ public class JwtAuthFilter extends OncePerRequestFilter implements IJWTAuthFilte
                 path.startsWith("/auth/register") ||
                 path.startsWith("/oauth2") ||      // Abilita endpoint OAuth2
                 path.startsWith("/.well-known") || // Necessario per OpenID Configuration
-                path.startsWith("/ws") || path.startsWith("/ws/")
+                path.startsWith("/ws") ||
+                path.startsWith("/ws/")
                 ;
     }
 

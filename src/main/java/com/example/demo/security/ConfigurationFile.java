@@ -57,6 +57,7 @@ public class ConfigurationFile {
                                 "/oauth2/**",
                                 "/login/oauth2/**",
                                 "/sendMessage/toMe",
+                                "/ws",
                                 "/ws/**"
                         ).permitAll()
                         .requestMatchers("/auth/get/all").authenticated()
