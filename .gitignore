@@ -34,3 +34,4 @@ build/
 oauth2/
 secret/*
 logging/
+secret/
