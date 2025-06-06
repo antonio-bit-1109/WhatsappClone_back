@@ -1,13 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
+import com.example.demo.dto.responses.StoredMessageDTO;
 import com.example.demo.interfaces.ISendMessage;
 import com.example.demo.repository.StoreMessageRepository;
 import com.example.demo.utility.exception.BadWordFounded;
 import com.example.demo.utility.exception.InvalidEmailFormat;
 import com.example.demo.utility.extracting.ExtractBadWords;
 import com.example.demo.utility.factory.entityfactory.Factory;
+import com.example.demo.utility.mapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SendMessageService implements ISendMessage {
@@ -15,14 +19,17 @@ public class SendMessageService implements ISendMessage {
     private final StoreMessageRepository storeMessageRepository;
     private final Factory factory;
     private final ExtractBadWords extractBadWords;
+    private final ModelMapper modelMapper;
 
     public SendMessageService(StoreMessageRepository storeMessageRepository,
                               Factory factory,
-                              ExtractBadWords extractBadWords
+                              ExtractBadWords extractBadWords,
+                              ModelMapper modelMapper
     ) {
         this.storeMessageRepository = storeMessageRepository;
         this.factory = factory;
         this.extractBadWords = extractBadWords;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -46,5 +53,13 @@ public class SendMessageService implements ISendMessage {
         this.storeMessageRepository.save(this.factory.createEntityStoreMessage(data));
         this.extractBadWords.resetSetParolacceFrontEnd();
 
+    }
+
+    @Override
+    public List<StoredMessageDTO> getAllEmailFromPeople() {
+        return this.storeMessageRepository.findAll()
+                .stream()
+                .map(this.modelMapper::fromEntityToDto)
+                .toList();
     }
 }

@@ -25,7 +25,7 @@ public class Messaggio implements BaseEntity {
     @Column(nullable = false)
     private MessageStatus messageStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     public Chat getChat() {
