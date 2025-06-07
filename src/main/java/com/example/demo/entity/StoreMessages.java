@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import com.example.demo.interfaces.BaseEntity;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 public class StoreMessages implements BaseEntity {
@@ -20,12 +22,35 @@ public class StoreMessages implements BaseEntity {
     @Column(nullable = false)
     private boolean haveReplied = false;
 
-    public StoreMessages(String emailSender, String text) {
+    @Column(nullable = false)
+    private LocalDateTime receivedAt;
+
+    @Column(nullable = true)
+    private LocalDateTime answeredAt;
+
+    public StoreMessages(String emailSender, String text, LocalDateTime receivedAt) {
         this.emailSender = emailSender;
         this.text = text;
+        this.receivedAt = receivedAt;
     }
 
     public StoreMessages() {
+    }
+
+    public void setAnsweredAt(LocalDateTime answeredAt) {
+        this.answeredAt = answeredAt;
+    }
+
+    public void setReceivedAt(LocalDateTime receivedAt) {
+        this.receivedAt = receivedAt;
+    }
+
+    public LocalDateTime getAnsweredAt() {
+        return answeredAt;
+    }
+
+    public LocalDateTime getReceivedAt() {
+        return receivedAt;
     }
 
     public boolean getHaveReplied() {
