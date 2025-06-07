@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.requests.messageMe.ReplayMessageDTO;
 import com.example.demo.dto.requests.messageMe.SendMeMessageDTO;
 import com.example.demo.dto.responses.StoredMessageDTO;
 import com.example.demo.dto.responses.StringResponse;
@@ -32,4 +33,11 @@ public class SendMeMessageEmailController {
     public ResponseEntity<List<StoredMessageDTO>> getAllMessagesFromPeople() {
         return ResponseEntity.ok(this.sendMessage.getAllEmailFromPeople());
     }
+
+
+    @PostMapping("/replay")
+    public ResponseEntity<StringResponse> replayToMessage(@Valid @RequestBody ReplayMessageDTO message) {
+        return ResponseEntity.ok(this.sendMessage.replayToMessage(message));
+    }
+
 }
