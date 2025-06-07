@@ -63,6 +63,7 @@ public class ConfigurationFile {
                         .requestMatchers("/auth/get/all").authenticated()
                         .requestMatchers("/auth/edit").authenticated()
                         .requestMatchers("/chat/rest/*").authenticated()
+                        .requestMatchers("/sendMessage/replay").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 

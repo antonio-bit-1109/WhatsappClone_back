@@ -87,7 +87,7 @@ public class Factory implements EntityFactory {
 
     @Override
     public StoreMessages createEntityStoreMessage(SendMeMessageDTO data) {
-        return new StoreMessages(data.getSender(), data.getMessage());
+        return new StoreMessages(data.getSender(), data.getMessage(), LocalDateTime.now());
     }
 
     @Override

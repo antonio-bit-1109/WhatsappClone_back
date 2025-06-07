@@ -232,4 +232,33 @@ public class ControllerResponseExceptions extends ResponseEntityExceptionHandler
         ),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(StoreMessageNotFound.class)
+    public ResponseEntity<ErrorResponse> handleStoreMessageNotFound(
+            StoreMessageNotFound ex,
+            WebRequest webRequest
+    ) {
+        return new ResponseEntity<>(new ErrorResponse(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now()
+        ),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ErrorSendEmail.class)
+    public ResponseEntity<ErrorResponse> handleStoreMessageNotFound(
+            ErrorSendEmail ex,
+            WebRequest webRequest
+    ) {
+        return new ResponseEntity<>(new ErrorResponse(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                LocalDateTime.now()
+        ),
+                HttpStatus.BAD_REQUEST);
+    }
+    
 }

@@ -50,9 +50,11 @@ public class ModelMapper implements IModelMapper<GetUserDTO, MinimalUserInfoChat
     @Override
     public StoredMessageDTO fromEntityToDto(StoreMessages e) {
         StoredMessageDTO s = new StoredMessageDTO();
+        s.setId(e.getId());
         s.setContentMsg(e.getText());
         s.setHaveReplied(e.getHaveReplied());
         s.setEmailSender(e.getEmailSender());
+        s.setReceivedAt(e.getReceivedAt());
         return s;
     }
 
