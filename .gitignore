@@ -35,3 +35,6 @@ oauth2/
 secret/*
 logging/
 secret/
+
+#cartella contente password per la mail dell aplicazione puzzapp.assistenza@gmail.com per inviare e rispondere alle email arrivate sull aplicazione
+passwordsmtpemail
