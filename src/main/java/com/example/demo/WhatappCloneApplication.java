@@ -1,6 +1,8 @@
 package com.example.demo;
 
 
+import com.example.demo.dto.adminCredential.adminCredential1;
+import com.example.demo.dto.adminCredential.adminCredential2;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -8,12 +10,14 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.access.annotation.Secured;
 
 
 @SpringBootApplication
 @EnableScheduling
+@EnableConfigurationProperties(value = {adminCredential1.class, adminCredential2.class})
 @OpenAPIDefinition(
         info = @Info(
                 title = "clone whatsapp",

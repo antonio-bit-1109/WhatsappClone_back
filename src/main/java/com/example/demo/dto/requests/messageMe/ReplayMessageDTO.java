@@ -25,14 +25,7 @@ public class ReplayMessageDTO implements DtoInterface {
     public void setIdStoredMessage(Long idStoredMessage) {
         this.idStoredMessage = idStoredMessage;
     }
-
-//    public String getEmailSender() {
-//        return emailSender;
-//    }
-//
-//    public void setEmailSender(String emailSender) {
-//        this.emailSender = emailSender;
-//    }
+    
 
     public String getReplayMessage() {
         return replayMessage;

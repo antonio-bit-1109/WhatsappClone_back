@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.adminCredential.adminCredential1;
+import com.example.demo.dto.adminCredential.adminCredential2;
 import com.example.demo.dto.requests.appUser.*;
 import com.example.demo.dto.responses.ExtraMinimalUserInfo;
 import com.example.demo.dto.responses.GetUserDTO;
@@ -60,6 +62,9 @@ public class AuthService implements IAuthService,
     // chiamata al logger statico predefinito di spring
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
+    private final adminCredential1 adminCredential1;
+    private final adminCredential2 adminCredential2;
+
 
     public AuthService(App_UserRepository appUserRepository,
                        AnagraficaRepository anagraficaRepository,
@@ -67,7 +72,7 @@ public class AuthService implements IAuthService,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
                        GenerateToken generateToken,
-                       ModelMapper modelMapper
+                       ModelMapper modelMapper, adminCredential1 adminCredential1, adminCredential2 adminCredential2
 
     ) {
         this.appUserRepository = appUserRepository;
@@ -77,6 +82,8 @@ public class AuthService implements IAuthService,
         this.authenticationManager = authenticationManager;
         this.generateToken = generateToken;
         this.modelMapper = modelMapper;
+        this.adminCredential1 = adminCredential1;
+        this.adminCredential2 = adminCredential2;
     }
 
 
@@ -306,18 +313,17 @@ public class AuthService implements IAuthService,
     @Override
     public boolean checkIfIsRegisteringAdmin(UserRegistrationDTO data) {
 
-        if (data.getUsername().equals("puzzoneSchifo") && data.getPassword().equals("puzzoneSchifo")) {
+        if (data.getUsername().equals(adminCredential1.admincredential1().get("name")) && data.getPassword().equals(adminCredential1.admincredential1().get("password"))) {
 
             if (this.checkIfThisAdminAlreadyCreated(data.getUsername())) {
                 throw new AdminAlreadyCreated("utente admin già creato");
             } else {
                 return true;
             }
-
-
+            
         }
 
-        if (data.getUsername().equals("gnomoCacca") && data.getPassword().equals("gnomoCacca")) {
+        if (data.getUsername().equals(adminCredential2.admincredential2().get("name")) && data.getPassword().equals(adminCredential2.admincredential2().get("password"))) {
 
             if (this.checkIfThisAdminAlreadyCreated(data.getUsername())) {
                 throw new AdminAlreadyCreated("utente admin già creato");
